@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://curtain-drop-media.vercel.app/sitemap.xml

@@ -1,0 +1,2247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<title>Curtain Drop Media — Visual Storytelling Studio</title>
+<meta name="description" content="Curtain Drop Media is a visual storytelling studio in Maharashtra, India — photography, videography, brand identity and web design. 300+ projects, 40+ brands.">
+<meta property="og:title" content="Curtain Drop Media — Visual Storytelling Studio">
+<meta property="og:description" content="Curtain Drop Media is a visual storytelling studio in Maharashtra, India — photography, videography, brand identity and web design. 300+ projects, 40+ brands.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Curtain Drop Media">
+<meta property="og:url" content="https://curtain-drop-media.vercel.app/">
+<meta property="og:image" content="https://curtain-drop-media.vercel.app/assets/work/8fb541b4-183c-416f-b2b0-c4087080f7d6.webp">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Curtain Drop Media — Visual Storytelling Studio">
+<meta name="twitter:description" content="Curtain Drop Media is a visual storytelling studio in Maharashtra, India — photography, videography, brand identity and web design. 300+ projects, 40+ brands.">
+<meta name="twitter:image" content="https://curtain-drop-media.vercel.app/assets/work/8fb541b4-183c-416f-b2b0-c4087080f7d6.webp">
+<link rel="canonical" href="https://curtain-drop-media.vercel.app/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Urbanist:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ════════ TOKENS ════════ */
+:root{
+  --bg:#050505; --bg2:#0B0906; --bg3:#030303;
+  --ivory:#F4EFE4; --ivory-dim:rgba(244,239,228,.66);
+  --gold:#C9A84C; --gold-soft:rgba(201,168,76,.35);
+  --muted:#8A8578;
+  --line:rgba(244,239,228,.14);
+  --serif:'Cormorant',Georgia,serif;
+  --sans:'Urbanist',Helvetica,Arial,sans-serif;
+  --ease:cubic-bezier(.19,1,.22,1);
+}
+*{margin:0;padding:0;box-sizing:border-box;border-radius:0!important}
+html{scrollbar-width:thin;scrollbar-color:#3a342a #050505}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+.lenis.lenis-stopped{overflow:hidden}
+body{
+  background:var(--bg); color:var(--ivory);
+  font-family:var(--sans); font-weight:300; font-size:16px; line-height:1.7;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+::selection{background:var(--gold);color:#050505}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{background:none;border:0;color:inherit;font:inherit;cursor:pointer}
+.serif{font-family:var(--serif)}
+.gold{color:var(--gold)}
+.it{font-style:italic}
+
+/* ════════ BACKGROUND LAYERS ════════ */
+/* "Lit Velvet" backdrop — a draped silk/gold curtain raked by volumetric
+   stage spotlights, drawn in one fullscreen WebGL shader (#bgstage). The key
+   light tracks the cursor ("you hold the light") and the whole scene re-lights
+   per section, the way fromanother.love crossfades its canvas. #bgfade is the
+   deepest tone + the no-WebGL fallback; #grain keeps the filmic texture on top. */
+#bgfade{position:fixed;inset:0;z-index:0;background:var(--bg);transition:background 1.3s var(--ease)}
+#bgstage{position:fixed;inset:0;z-index:1;width:100%;height:100%;pointer-events:none;opacity:0;transition:opacity 1.4s var(--ease)}
+#bgstage.lit{opacity:1}
+#grain{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.5;mix-blend-mode:overlay}
+main{position:relative;z-index:3}
+section{position:relative}
+
+/* ════════ HOVER-LIT TILES ════════ */
+/* When the cursor rests on an image/tile, the volumetric beam in #bgstage
+   converges on it (uHover) AND the tile itself steps into the light: the
+   surface brightens and a soft gold glow blooms around its edges. JS tags
+   the targets with .lit-tile and toggles .spotlit on hover. */
+.lit-tile{transition:box-shadow .55s var(--ease),filter .55s var(--ease)}
+.fan-card.spotlit,.casc-img.spotlit,.deck-stage-inner.spotlit{
+  box-shadow:0 22px 64px rgba(0,0,0,.5),0 0 46px rgba(201,168,76,.30),0 0 130px rgba(201,168,76,.12)!important;
+}
+.fan-card.spotlit img,.casc-img.spotlit img{filter:brightness(1.13) saturate(1.07) contrast(1.02)}
+.deck-stage-inner.spotlit .deck-image.active{filter:brightness(0.9)}
+
+/* ════════ TYPE SYSTEM ════════ */
+.label{
+  font-size:11px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--muted);display:flex;align-items:center;gap:14px;
+}
+.label .ln{display:inline-block;width:42px;height:1px;background:var(--gold-soft)}
+.label .n{color:var(--gold);font-weight:600}
+.display{
+  font-family:var(--serif);font-weight:500;line-height:1.04;
+  letter-spacing:-.01em;color:var(--ivory);
+}
+.body-copy{max-width:52ch;color:var(--ivory-dim);font-size:17px}
+.wrap{width:min(1380px,calc(100% - clamp(40px,7vw,140px)));margin:0 auto}
+
+/* split-word reveal */
+.sw{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.08em;margin-bottom:-.08em}
+.sw>span{display:inline-block;transform:translateY(115%);opacity:0;will-change:transform}
+.on .sw>span,.sw.on>span{transform:translateY(0);opacity:1;transition:transform var(--d,.7s) var(--ease),opacity calc(var(--d,.7s)*.7) linear;transition-delay:var(--dl,0s)}
+/* simple fade-up reveal */
+[data-reveal]{opacity:0;transform:translateY(36px)}
+[data-reveal].on{opacity:1;transform:none;transition:opacity .9s linear,transform 1.1s var(--ease);transition-delay:var(--dl,0s)}
+
+/* rolling hover label */
+.roll{position:relative;display:inline-block;overflow:hidden;vertical-align:bottom}
+.roll .rt{display:block;transition:transform .55s var(--ease)}
+.roll .rc{position:absolute;left:0;top:100%;display:block;transition:transform .55s var(--ease);color:var(--gold)}
+a:hover .roll .rt,button:hover .roll .rt,.rollhost:hover .roll .rt{transform:translateY(-100%)}
+a:hover .roll .rc,button:hover .roll .rc,.rollhost:hover .roll .rc{transform:translateY(-100%)}
+
+/* underline sweep */
+.uline{position:relative}
+.uline::after{content:"";position:absolute;left:0;bottom:-3px;width:100%;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:right;transition:transform .6s var(--ease)}
+a:hover .uline::after,button:hover .uline::after{transform:scaleX(1);transform-origin:left}
+
+/* ════════ LOADER ════════ */
+/* The red velvet HOUSE CURTAIN lives here, not behind the hero. It fills the
+   loader (#curtain WebGL canvas) and parts from the centre on the visitor's
+   first scroll — literally "raising the curtain" to reveal the homepage. */
+#loader{position:fixed;inset:0;z-index:100;background:#0a0405;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:26px;overflow:hidden}
+#loader #curtain{position:absolute;inset:0;width:100%;height:100%;z-index:0;display:block}
+#loader .loader-mark{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:26px;text-align:center;text-shadow:0 2px 26px rgba(0,0,0,.6)}
+#loader .rod{width:min(420px,70vw);height:1px;background:rgba(244,239,228,.18);position:relative;overflow:visible}
+#loader .rod i{position:absolute;left:0;top:0;height:1px;background:var(--gold);width:0%;display:block;box-shadow:0 0 12px var(--gold)}
+#loader .greet{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(22px,3.4vw,34px);color:var(--ivory);opacity:0}
+#loader .pct{position:fixed;right:clamp(24px,5vw,72px);bottom:clamp(14px,3vw,40px);z-index:2;font-family:var(--serif);font-weight:300;font-size:clamp(64px,11vw,150px);line-height:1;color:var(--gold);font-variant-numeric:tabular-nums;text-shadow:0 2px 30px rgba(0,0,0,.7)}
+#loader .tag{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--ivory-dim)}
+/* "Scroll to enter" — hidden until assets are ready, then invites the first scroll */
+#loader .enter{position:relative;display:inline-flex;flex-direction:column;align-items:center;gap:12px;margin-top:6px;font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--ivory);opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity .8s var(--ease),transform .8s var(--ease)}
+#loader.ready .enter{opacity:1;transform:none;pointer-events:auto}
+#loader .enter .ea{position:relative;width:22px;height:30px;border:1px solid rgba(244,239,228,.5);border-radius:14px!important;display:inline-block}
+#loader .enter .ea i{position:absolute;left:50%;top:7px;width:3px;height:6px;margin-left:-1.5px;background:var(--gold);border-radius:3px!important;animation:mouse 1.9s var(--ease) infinite}
+#loader .enter .ea i:last-child{display:none}
+@keyframes mouse{0%{opacity:0;transform:translateY(-4px)}30%{opacity:1}70%{opacity:1;transform:translateY(6px)}100%{opacity:0;transform:translateY(8px)}}
+#loader.done{pointer-events:none}
+
+/* ════════ HEADER ════════ */
+header{
+  position:fixed;z-index:50;top:0;left:0;right:0;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:clamp(18px,2.6vw,30px) clamp(22px,3.6vw,56px);
+  opacity:0;transform:translateY(-18px);transition:opacity .8s linear,transform .9s var(--ease);
+}
+body.ready header{opacity:1;transform:none}
+.wordmark{font-family:var(--serif);font-weight:600;letter-spacing:.42em;font-size:17px;color:var(--ivory)}
+.wordmark b{color:var(--gold);font-weight:600}
+.head-right{display:flex;align-items:center;gap:clamp(18px,3vw,38px);font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:500}
+.head-cta .arr{display:inline-block;margin-left:8px;color:var(--gold);transition:transform .55s var(--ease)}
+.head-cta:hover .arr{transform:translateX(6px)}
+#menu-btn{display:flex;align-items:center;gap:10px}
+#menu-btn .bars{width:26px;height:10px;position:relative}
+#menu-btn .bars i{position:absolute;left:0;width:100%;height:1px;background:var(--ivory);transition:transform .5s var(--ease),top .5s var(--ease)}
+#menu-btn .bars i:first-child{top:0}#menu-btn .bars i:last-child{top:9px}
+body.menu-open #menu-btn .bars i:first-child{top:4px;transform:rotate(45deg)}
+body.menu-open #menu-btn .bars i:last-child{top:4px;transform:rotate(-45deg)}
+
+/* ════════ FULLSCREEN MENU ════════ */
+#menu{position:fixed;inset:0;z-index:49;background:rgba(3,3,3,.97);display:flex;align-items:center;visibility:hidden;opacity:0;transition:opacity .6s linear,visibility 0s .6s}
+body.menu-open #menu{visibility:visible;opacity:1;transition:opacity .6s linear}
+#menu .wrap{display:grid;grid-template-columns:1.4fr 1fr;gap:clamp(30px,6vw,90px);align-items:center}
+#menu nav a{display:block;font-family:var(--serif);font-weight:500;font-size:clamp(40px,7.5vw,86px);line-height:1.14;color:var(--ivory);overflow:hidden}
+#menu nav a span{display:inline-block;transform:translateY(110%);transition:transform .8s var(--ease)}
+body.menu-open #menu nav a span{transform:none}
+#menu nav a:hover{color:var(--gold)}
+#menu .sub{display:flex;flex-direction:column;gap:14px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+#menu .sub a:hover{color:var(--gold)}
+#menu .sub .gt{color:var(--gold);font-weight:600;margin-bottom:6px}
+
+/* ════════ SECTION RAIL ════════ */
+#rail{position:fixed;z-index:48;right:clamp(14px,2.4vw,40px);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:17px;opacity:0;transition:opacity .8s linear}
+body.ready #rail{opacity:1}
+#rail a{display:flex;align-items:center;justify-content:flex-end;gap:10px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);transition:color .4s}
+#rail a .nm{opacity:0;transform:translateX(8px);transition:opacity .4s,transform .5s var(--ease)}
+#rail a:hover .nm{opacity:1;transform:none}
+#rail a .no{font-family:var(--serif);font-size:13px;font-weight:600;width:18px;text-align:center;transition:color .4s,transform .4s var(--ease)}
+#rail a.act{color:var(--ivory)}
+#rail a.act .no{color:var(--gold);transform:scale(1.45)}
+#rail a.act .nm{opacity:1;transform:none}
+
+/* ════════ HERO ════════ */
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+#hero .wrap{padding-top:10vh}
+#hero h1{font-size:clamp(52px,10.4vw,148px);font-weight:500}
+#hero h1 .it{color:var(--gold)}
+#hero .meta{margin-top:clamp(26px,4vh,44px);display:flex;flex-wrap:wrap;gap:10px 26px;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
+#hero .meta b{color:var(--ivory);font-weight:500}
+#hero .ctas{margin-top:clamp(34px,5.6vh,60px);display:flex;gap:clamp(20px,3.4vw,44px);align-items:center}
+.btn{display:inline-flex;align-items:center;gap:12px;border:1px solid var(--gold-soft);padding:17px 34px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;transition:border-color .5s,background .5s}
+.btn:hover{border-color:var(--gold);background:rgba(201,168,76,.07)}
+.btn .arr{color:var(--gold)}
+.link-plain{font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:500}
+#scroll-cue{position:absolute;bottom:34px;left:clamp(22px,3.6vw,56px);display:flex;align-items:center;gap:14px;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);transition:opacity .55s ease,transform .55s var(--ease)}
+#scroll-cue.gone{opacity:0;pointer-events:none;transform:translateY(10px)}
+#scroll-cue .stem{width:1px;height:52px;background:var(--line);position:relative;overflow:hidden}
+#scroll-cue .stem i{position:absolute;left:0;top:-40%;width:1px;height:40%;background:var(--gold);animation:cue 2.1s var(--ease) infinite}
+@keyframes cue{0%{top:-40%}60%,100%{top:110%}}
+
+/* ════════ SECTION SHELL ════════ */
+.sec{padding:clamp(110px,16vh,180px) 0}
+.sec .head{margin-bottom:clamp(40px,7vh,76px)}
+.statement{font-size:clamp(38px,6.6vw,92px)}
+.statement .it{color:var(--gold)}
+
+/* ════════ 1 · STORY ════════ */
+#story .grid{display:grid;grid-template-columns:1.25fr .9fr;gap:clamp(36px,6vw,110px);align-items:start}
+#story .mission{display:flex;flex-direction:column;gap:20px;margin-top:8px}
+#story .mission .row{display:flex;align-items:baseline;gap:18px;border-bottom:1px solid var(--line);padding-bottom:18px}
+#story .mission .row .no{font-size:11px;color:var(--gold);font-weight:600;letter-spacing:.12em}
+#story .mission .row .tx{font-family:var(--serif);font-size:clamp(24px,2.6vw,34px);font-weight:500}
+#story .copy p+p{margin-top:1.2em}
+#stats{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:clamp(64px,10vh,110px);border-top:1px solid var(--line);padding-top:clamp(34px,5vh,54px)}
+.stat .val{font-family:var(--serif);font-weight:400;font-size:clamp(44px,5.8vw,84px);line-height:1;color:var(--ivory);display:flex;align-items:baseline}
+.stat .val .sfx{color:var(--gold);margin-left:2px;font-size:.62em}
+.stat .cap{margin-top:10px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.odo{display:inline-block;font-variant-numeric:lining-nums tabular-nums}
+
+/* ════════ 2 · CRAFT ════════ */
+#craft .rows{border-top:1px solid var(--line);display:grid;grid-template-columns:1fr}
+@media (min-width:900px){#craft .rows{grid-template-columns:repeat(3,1fr);gap:clamp(30px,4vw,60px);border-bottom:1px solid var(--line)}}
+.craft-row{display:flex;flex-direction:column;gap:clamp(16px,2.4vh,28px);padding:clamp(40px,6vh,72px) 0;border-bottom:1px solid var(--line)}
+@media (min-width:900px){.craft-row{border-bottom:none;padding-bottom:clamp(40px,6vh,72px)}}
+.craft-row .no{font-family:var(--serif);font-size:13px;color:var(--gold);font-weight:600;letter-spacing:.12em}
+.craft-row h3{font-family:var(--serif);font-weight:500;font-size:clamp(38px,5.6vw,76px);line-height:1.0;margin:0}
+.craft-row ul{list-style:none;display:flex;flex-direction:column;gap:11px;padding-top:4px}
+.craft-row li{font-size:15px;color:var(--ivory-dim);display:flex;align-items:center;gap:12px}
+.craft-row li::before{content:"";width:18px;height:1px;background:var(--gold-soft);flex:none;transition:width .5s var(--ease),background .5s}
+.craft-row li:hover::before{width:30px;background:var(--gold)}
+/* What we do · hover-reveal images on each service item (adapted from RevealImageList) */
+.craft-row li{position:relative;width:-moz-fit-content;width:fit-content}
+.rv{position:absolute;left:calc(100% + 24px);top:-44px;z-index:40;width:84px;height:108px;pointer-events:none}
+.rv-inner{position:relative;width:84px;height:84px;border-radius:8px;overflow:hidden;border:1px solid rgba(244,239,228,.12);box-shadow:none;opacity:0;transform:scale(0);transition:all .5s var(--ease) .1s}
+.rv-front{transform:translate(0,0) rotate(0);transition:transform .5s var(--ease) .15s}
+.craft-row li:hover .rv-inner{opacity:1;transform:scale(1);width:100%;height:100%;box-shadow:0 20px 44px rgba(0,0,0,.6)}
+.craft-row li:hover .rv-front{transform:translate(24px,24px) rotate(12deg)}
+.rv img{width:100%;height:100%;object-fit:cover;display:block}
+@media (hover:none){.rv{display:none}}
+#frameline{margin-top:clamp(60px,9vh,100px);text-align:center}
+#frameline .display{font-size:clamp(30px,4.6vw,64px);font-weight:400}
+#frameline .w{display:inline-block;transition:color .45s,transform .6s var(--ease);cursor:default}
+#frameline .w:hover{color:var(--gold);transform:translateY(-6px) rotate(-2deg)}
+
+/* ════════ 3 · WORK DECK ════════ */
+#work { padding: 0; position: relative; }
+#deck-wrapper { position: relative; height: 100vh; overflow: hidden; display: flex; align-items: center; padding: 40px clamp(20px, 4vw, 60px); box-sizing: border-box; }
+
+/* Left Nav */
+.deck-nav { flex: 0 0 clamp(160px, 15vw, 220px); display: flex; flex-direction: column; gap: 16px; z-index: 10; }
+.deck-nav-item { display: flex; align-items: center; gap: 12px; font-family: var(--serif); font-size: 13px; color: rgba(255,255,255,0.4); cursor: pointer; transition: color 0.4s; }
+.deck-nav-item.active { color: var(--gold); }
+.deck-nav-item .line { width: 0; height: 1px; background: var(--gold); transition: width 0.4s; }
+.deck-nav-item.active .line { width: 24px; }
+
+.deck-thumb { position: relative; width: 64px; height: 40px; transition: transform 0.4s; display: flex; align-items: center; }
+.deck-thumb img { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; transition: opacity 0.4s; }
+.deck-thumb.active img, .deck-thumb:hover img { opacity: 1; }
+
+/* Center Stage */
+.deck-stage { flex: 1 1 auto; position: relative; height: 100%; display: flex; align-items: center; justify-content: center; }
+.deck-stage-inner { position: relative; width: 100%; max-width: 1100px; height: 65vh; }
+.deck-image { position: absolute; inset: 0; background-size: cover; background-position: center; filter: brightness(0.65); opacity: 0; transition: opacity 0.8s ease; will-change: opacity; }
+.deck-image.active { opacity: 1; z-index: 2; }
+.deck-titles { position: absolute; top: 50%; left: clamp(-40px, -5vw, -80px); transform: translateY(-50%); z-index: 5; pointer-events: none; width: 100%; height: 100%; }
+.deck-titles h2 { position: absolute; top: 50%; left: 0; transform: translateY(-50%) translateY(20px); font-family: var(--sans); font-size: clamp(48px, 6vw, 110px); font-weight: 700; line-height: 1; margin: 0; opacity: 0; letter-spacing: -0.02em; transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); text-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+.deck-titles h2.active { opacity: 1; transform: translateY(-50%) translateY(0); pointer-events: auto; }
+.deck-titles h2 a { color: inherit; text-decoration: none; pointer-events: none; outline: none; transition: opacity 0.3s ease; }
+.deck-titles h2.active a { pointer-events: auto; }
+.deck-titles h2 a:hover { opacity: 0.7; }
+/* whole stage opens the active gallery → signal it */
+.deck-stage-inner { cursor: pointer; }
+.deck-cta {
+  position: absolute; z-index: 6; right: 22px; bottom: 22px;
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 11px 18px; margin: 0;
+  font-family: var(--sans); font-size: 11px; font-weight: 600; white-space: nowrap;
+  letter-spacing: .2em; text-transform: uppercase; line-height: 1;
+  color: var(--ivory); cursor: pointer; max-width: calc(100vw - 32px);
+  background: rgba(8,7,5,.42); border: 1px solid rgba(201,168,76,.45);
+  border-radius: 999px !important; backdrop-filter: blur(8px) saturate(1.1);
+  box-shadow: 0 6px 22px rgba(0,0,0,.34), inset 0 0 0 1px rgba(255,255,255,.04);
+  transition: background .35s var(--ease), border-color .35s var(--ease), color .35s var(--ease), transform .35s var(--ease), box-shadow .35s var(--ease);
+}
+.deck-cta .dc-count { color: var(--gold); font-weight: 500; }
+.deck-cta .dc-arrow { color: var(--gold); transition: transform .35s var(--ease); }
+.deck-cta:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+/* light up when hovering anywhere on the image, or the cue itself */
+.deck-stage-inner:hover .deck-cta,
+.deck-cta:hover {
+  background: rgba(201,168,76,.16); border-color: var(--gold);
+  color: #fff; transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.42), 0 0 22px rgba(201,168,76,.22);
+}
+.deck-stage-inner:hover .deck-cta .dc-arrow,
+.deck-cta:hover .dc-arrow { transform: translateX(5px); }
+/* ── mobile work deck: stack vertically so the image fits the viewport ── */
+@media (max-width: 720px) {
+  /* column layout: image on top, thumbnail strip below — kills the horizontal overflow */
+  #deck-wrapper { flex-direction: column; justify-content: center; gap: 16px; padding: 80px 18px 22px; }
+  .deck-stage { order: 1; width: 100%; height: auto; flex: 0 0 auto; }
+  .deck-stage-inner { width: 100%; max-width: none; height: 56vh; }
+  /* readability scrim across the lower image so the overlaid title stays legible (under titles z5, over canvas z3) */
+  .deck-stage-inner::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 48%; z-index: 4; pointer-events: none;
+    background: linear-gradient(to top, rgba(6,5,3,.9) 0%, rgba(6,5,3,.55) 38%, transparent 100%); }
+  /* category title: anchored to the image's lower-left, constrained so it wraps instead of clipping */
+  .deck-titles { left: 0; right: 0; top: 0; bottom: 0; width: auto; height: 100%; transform: none; }
+  .deck-titles h2 { top: auto; bottom: 66px; left: 18px; right: 18px; font-size: clamp(30px, 8.6vw, 42px); line-height: .98; transform: translateY(14px); }
+  .deck-titles h2.active { transform: translateY(0); }
+  /* cue pill back to bottom-right — the image no longer overflows, so the right edge is on-screen again */
+  .deck-cta { left: auto; right: 16px; bottom: 16px; padding: 9px 14px; font-size: 10px; letter-spacing: .12em; gap: 7px; }
+  .deck-cta .dc-count { display: none; }
+  /* left nav → compact horizontal filmstrip of tappable thumbnails under the image */
+  .deck-nav { order: 2; flex: 0 0 auto; flex-direction: row; justify-content: center; align-items: center; gap: 10px; width: 100%; }
+  .deck-nav-item { gap: 0; }
+  .deck-nav-item .num, .deck-nav-item .line { display: none; }
+  .deck-thumb { width: 52px; height: 34px; }
+}
+
+/* ════════ 4 · STUDIO ════════ */
+#studio .casc{position:relative;height:clamp(560px,92vh,860px);margin-top:clamp(30px,6vh,60px)}
+.casc-img{position:absolute;overflow:hidden;will-change:transform}
+.casc-img img{width:100%;height:100%;object-fit:cover;filter:saturate(.9) brightness(.88)}
+.casc-img::after{content:"";position:absolute;inset:0;border:1px solid rgba(244,239,228,.1)}
+#strip{margin-top:clamp(70px,11vh,120px);border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;padding:30px 0}
+#strip .lane{display:flex;gap:clamp(48px,7vw,110px);width:max-content;animation:lane 46s linear infinite}
+#strip:hover .lane{animation-play-state:paused}
+#strip .sl{display:flex;align-items:baseline;gap:20px;width:max-content}
+#strip .sl .no{font-size:11px;color:var(--gold);font-weight:600}
+#strip .sl .tx{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(19px,2.2vw,27px);color:var(--ivory-dim);white-space:nowrap}
+@keyframes lane{to{transform:translateX(-50%)}}
+#digits{display:none}
+
+/* ════════ 5 · BRANDS ════════ */
+#brands .feat{display:flex;flex-wrap:wrap;gap:14px 40px;margin:clamp(26px,4vh,44px) 0 clamp(44px,7vh,72px);font-size:12px;letter-spacing:.16em;text-transform:uppercase}
+#brands .feat span{color:var(--ivory)}
+#brands .feat i{font-style:normal;color:var(--gold);margin-left:10px;font-size:10px}
+.marq{overflow:hidden;margin:14px 0}
+.marq .lane{display:flex;gap:14px;width:max-content;animation:lane var(--spd,44s) linear infinite}
+.marq.rev .lane{animation-direction:reverse}
+.marq:hover .lane{animation-play-state:paused}
+/* frosted-glass logo tiles — translucent pale frost over the gold stage */
+.chip{position:relative;height:72px;min-width:150px;padding:12px 26px;display:flex;align-items:center;justify-content:center;flex:none;border-radius:13px!important;
+  background:linear-gradient(155deg,rgba(250,247,241,.65),rgba(236,231,221,.50));
+  border:1px solid rgba(255,255,255,.32);
+  box-shadow:0 10px 28px -14px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.5),inset 0 0 22px rgba(201,168,76,.10);
+  transition:transform .5s var(--ease),box-shadow .5s var(--ease),background .5s var(--ease),border-color .5s var(--ease)}
+/* top-left specular sheen so it reads as glass, not a flat panel */
+.chip::before{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(158deg,rgba(255,255,255,.22),transparent 46%)}
+.chip:hover{transform:translateY(-5px);border-color:rgba(201,168,76,.45);
+  background:linear-gradient(155deg,rgba(253,251,246,.80),rgba(242,237,227,.64));
+  box-shadow:0 18px 40px -16px rgba(0,0,0,.66),0 0 0 1px rgba(201,168,76,.28),inset 0 1px 0 rgba(255,255,255,.6),inset 0 0 28px rgba(201,168,76,.16)}
+.chip img{position:relative;max-height:42px;max-width:128px;object-fit:contain}
+
+/* ════════ FRAMES FAN ════════ */
+#frames{padding:0}
+#fanstage{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+#fanstage .head{position:absolute;top:clamp(70px,12vh,120px);left:0;right:0;text-align:center;z-index:1}
+.fan-card{position:absolute;width:clamp(170px,21vw,290px);aspect-ratio:3/4.1;background:var(--ivory);padding:9px 9px 38px;will-change:transform}
+.fan-card img{width:100%;height:100%;object-fit:cover}
+.fan-card .cap{position:absolute;left:0;right:0;bottom:11px;text-align:center;font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:#3a342a;font-weight:600}
+
+/* ════════ TESTIMONIALS · 35mm film strip ════════ */
+#testimonials{padding:0;overflow:hidden}
+.reel-panel{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:clamp(70px,11vh,120px) 0}
+.reel-head{margin-bottom:clamp(34px,5.5vh,60px)}
+.reel-head .kick{margin-top:18px;max-width:520px;font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--ivory-dim)}
+/* ── the mechanical chassis — dark housing the film runs through ── */
+.reel-strip{position:relative;width:100%;overflow:hidden;background:#080603;
+  box-shadow:0 -1px 0 rgba(201,168,76,.09),0 1px 0 rgba(201,168,76,.09),
+  0 36px 80px -16px rgba(0,0,0,.95),0 -36px 80px -16px rgba(0,0,0,.95)}
+/* side vignette — darkens film behind and to the sides of the gate */
+.reel-strip::after{content:'';position:absolute;inset:36px 0;pointer-events:none;z-index:3;
+  background:linear-gradient(90deg,rgba(4,3,1,.82) 0%,transparent 18%,transparent 82%,rgba(4,3,1,.82) 100%)}
+/* ── perforation strips — background-position-x animated so holes MOVE with the film ── */
+.reel-perf{position:absolute;left:0;right:0;height:36px;z-index:5;
+  background-color:#1b1308;
+  /* SVG tile: film-base brown, punched rectangular holes w/ rounded corners + inner shadow edge */
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='36'%3E%3Crect width='32' height='36' fill='%231b1308'/%3E%3Crect x='7' y='8' width='18' height='20' rx='2.5' fill='%23060402'/%3E%3Crect x='7' y='8' width='18' height='2.5' rx='1' fill='%23ffffff' opacity='.03'/%3E%3Crect x='7' y='25.5' width='18' height='2.5' rx='1' fill='%23000000' opacity='.55'/%3E%3C/svg%3E");
+  background-repeat:repeat-x;background-size:32px 100%}
+.reel-perf.top{top:0;box-shadow:0 4px 14px rgba(0,0,0,.8),inset 0 -1px 0 rgba(201,168,76,.05)}
+.reel-perf.bottom{bottom:0;box-shadow:0 -4px 14px rgba(0,0,0,.8),inset 0 1px 0 rgba(201,168,76,.05)}
+/* ── viewport sits in the emulsion zone between the perf strips ── */
+.reel-viewport{overflow:hidden;margin:36px 0;position:relative;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}
+/* ── projector gate: gold aperture edges + warm bloom at the centre ── */
+.reel-gate{position:absolute;top:36px;bottom:36px;left:50%;transform:translateX(-50%);
+  width:clamp(300px,36vw,470px);pointer-events:none;z-index:4;
+  box-shadow:inset 1px 0 0 rgba(201,168,76,.24),inset -1px 0 0 rgba(201,168,76,.24)}
+.reel-gate::after{content:'';position:absolute;inset:0;
+  background:radial-gradient(70% 55% at 50% 44%,rgba(201,168,76,.075),transparent 68%)}
+/* ── horizontal film track ── */
+.reel-track{display:flex;align-items:stretch;padding:0 calc(50% - clamp(150px,18vw,235px));will-change:transform}
+/* ── individual frames: dark film-base border, opacity-only depth (no scale jitter) ── */
+.reel-frame{position:relative;flex:none;width:clamp(300px,36vw,470px);
+  padding:clamp(28px,3.2vw,46px) clamp(28px,3vw,42px);
+  border-right:2px solid #0c0a06;
+  display:flex;flex-direction:column;justify-content:center;
+  opacity:.28;
+  transition:opacity .6s var(--ease)}
+.reel-frame:first-child{border-left:2px solid #0c0a06}
+.reel-frame.in-gate{opacity:1}
+/* faint warm light-catch on the active frame's emulsion surface */
+.reel-frame.in-gate::before{content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(145deg,rgba(255,210,90,.028) 0%,transparent 55%)}
+.reel-frame .mark{font-family:var(--serif);font-style:italic;font-size:clamp(50px,5.6vw,76px);line-height:.6;color:var(--gold);opacity:.48;height:.4em;margin-bottom:8px}
+.reel-frame .qt{font-family:var(--serif);font-weight:500;font-size:clamp(19px,1.9vw,26px);line-height:1.38;color:var(--ivory);letter-spacing:.002em}
+.reel-frame .by{display:flex;align-items:center;gap:14px;margin-top:clamp(20px,2.6vh,32px)}
+.reel-frame .mono{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-family:var(--serif);font-size:14px;font-weight:600;letter-spacing:.04em;color:#1a1206;background:radial-gradient(circle at 32% 28%,#e8cf86,#c9a84c 62%,#9c7e34);box-shadow:0 4px 14px -4px rgba(201,168,76,.5),inset 0 1px 1px rgba(255,255,255,.4)}
+.reel-frame .who .nm{display:block;font-family:var(--sans);font-size:14px;font-weight:600;color:var(--ivory);letter-spacing:.01em}
+.reel-frame .who .rl{display:block;font-family:var(--sans);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-top:3px}
+/* ── film frame counter ── */
+.reel-counter{display:flex;align-items:center;gap:14px;margin:clamp(18px,2.8vh,30px) auto 0;
+  width:max-content;font-family:var(--sans);font-size:9px;letter-spacing:.36em;text-transform:uppercase;color:rgba(244,239,228,.28)}
+.reel-counter .fc{color:var(--gold);font-weight:600;letter-spacing:.1em;min-width:2ch;text-align:right;transition:color .3s}
+.reel-counter .sep{width:1px;height:10px;background:rgba(244,239,228,.16)}
+/* mobile / reduced motion */
+.reel-viewport.native{overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;-webkit-mask-image:none;mask-image:none}
+.reel-viewport.native::-webkit-scrollbar{display:none}
+.reel-viewport.native .reel-track{will-change:auto}
+.reel-viewport.native .reel-frame{scroll-snap-align:center;opacity:1}
+
+/* ════════ 6 · FAQ ════════ */
+#faq .qa{border-bottom:1px solid var(--line)}
+#faq .qa:first-of-type{border-top:1px solid var(--line)}
+#faq .q{width:100%;display:flex;align-items:baseline;gap:clamp(16px,3vw,40px);text-align:left;padding:clamp(24px,3.6vh,36px) 0}
+#faq .q .no{font-size:11px;color:var(--gold);font-weight:600;flex:none;width:30px}
+#faq .q h3{font-family:var(--serif);font-weight:500;font-size:clamp(22px,2.9vw,34px);flex:1;transition:color .4s}
+#faq .qa:hover .q h3{color:var(--gold)}
+#faq .q .pm{font-family:var(--serif);font-size:26px;color:var(--gold);transition:transform .55s var(--ease)}
+#faq .qa.open .q .pm{transform:rotate(45deg)}
+#faq .a{height:0;overflow:hidden}
+#faq .a p{max-width:62ch;color:var(--ivory-dim);padding:0 0 30px calc(30px + clamp(16px,3vw,40px))}
+
+/* ════════ 7 · BEGIN ════════ */
+#begin{padding-bottom:0}
+#begin .big{font-size:clamp(40px,7.2vw,104px);text-align:center}
+#cycle{display:inline-block;position:relative;height:1.2em;overflow:hidden;vertical-align:-0.22em;color:var(--gold);font-style:italic;text-align:left}
+#cycle span{display:block;height:1.2em;line-height:1.2}
+#begin .sub{text-align:center;color:var(--muted);margin:26px auto 0;max-width:46ch}
+#begin .panel{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,7vw,110px);margin-top:clamp(64px,10vh,110px)}
+.con-row{display:flex;flex-direction:column;gap:4px;padding:20px 0;border-bottom:1px solid var(--line)}
+.con-row .k{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted)}
+.con-row a{font-family:var(--serif);font-size:clamp(19px,1.9vw,25px);font-weight:500;width:fit-content}
+form .frow{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+form .ctl{display:flex;flex-direction:column;gap:8px}
+form label{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted)}
+form input,form select,form textarea{
+  background:transparent;border:0;border-bottom:1px solid var(--line);color:var(--ivory);
+  font-family:var(--sans);font-weight:300;font-size:15px;padding:10px 0;outline:none;transition:border-color .4s;
+}
+form select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--gold) 50%),linear-gradient(135deg,var(--gold) 50%,transparent 50%);background-position:calc(100% - 12px) 50%,calc(100% - 7px) 50%;background-size:5px 5px;background-repeat:no-repeat}
+form select option{background:#0B0906;color:var(--ivory)}
+form input:focus,form select:focus,form textarea:focus{border-color:var(--gold)}
+form textarea{resize:vertical;min-height:84px}
+form .send{margin-top:26px}
+#begin .endmark{margin-top:clamp(80px,13vh,150px);border-top:1px solid var(--line);padding:clamp(40px,7vh,70px) 0 110px;text-align:center}
+#begin .endmark .cdm{font-family:var(--serif);font-weight:600;letter-spacing:.34em;font-size:clamp(54px,9vw,130px);line-height:1;color:var(--ivory)}
+#begin .endmark .cdm b{color:var(--gold)}
+
+#begin .legal{display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px;margin-top:clamp(30px,5vh,50px);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+#begin .legal nav{display:flex;gap:26px}
+#begin .legal nav a:hover{color:var(--gold)}
+
+/* ════════ GALLERY OVERLAY ════════ */
+#gal{position:fixed;inset:0;z-index:60;background:rgba(3,3,3,.985);visibility:hidden;opacity:0;transition:opacity .55s linear,visibility 0s .55s;overflow-y:auto;overscroll-behavior:contain}
+body.gal-open #gal{visibility:visible;opacity:1;transition:opacity .55s linear}
+body.gal-open{overflow:hidden}
+#gal .bar{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:clamp(18px,2.6vw,30px) clamp(22px,3.6vw,56px);background:linear-gradient(to bottom,rgba(3,3,3,.92),rgba(3,3,3,0))}
+#gal .bar .t{font-family:var(--serif);font-weight:500;font-size:clamp(22px,3vw,34px)}
+#gal .bar .t i{font-style:normal;color:var(--gold);font-size:14px;margin-left:14px;letter-spacing:.18em}
+#gal-close{font-size:11px;letter-spacing:.24em;text-transform:uppercase;font-weight:500;border:1px solid var(--gold-soft);padding:12px 22px;transition:border-color .4s,background .4s}
+#gal-close:hover{border-color:var(--gold);background:rgba(201,168,76,.1)}
+#gal .cols{columns:3 320px;column-gap:14px;padding:10px clamp(22px,3.6vw,56px) 80px}
+#gal .cols img{width:100%;margin-bottom:14px;break-inside:avoid;opacity:0;transform:translateY(20px);transition:opacity .7s linear,transform .8s var(--ease);background:#0B0906;min-height:120px}
+#gal .cols img.ld{opacity:1;transform:none}
+#gal .cols img{cursor:zoom-in}
+
+/* ════════ LIGHTBOX ════════ */
+#lb{position:fixed;inset:0;z-index:80;background:rgba(3,3,3,.96);display:flex;align-items:center;justify-content:center;visibility:hidden;opacity:0;transition:opacity .35s linear,visibility 0s .35s;cursor:zoom-out}
+body.lb-open #lb{visibility:visible;opacity:1;transition:opacity .35s linear}
+#lb img{max-width:92vw;max-height:88vh;object-fit:contain;box-shadow:0 30px 90px rgba(0,0,0,.6);transform:scale(.96);transition:transform .4s var(--ease)}
+body.lb-open #lb img{transform:scale(1)}
+#lb .x{position:absolute;top:clamp(18px,3vw,30px);right:clamp(22px,3.6vw,56px);font-size:11px;letter-spacing:.24em;text-transform:uppercase;font-weight:500;color:var(--ivory);border:1px solid var(--gold-soft);padding:12px 22px;cursor:pointer;background:rgba(3,3,3,.4)}
+#lb .nav{position:absolute;top:50%;transform:translateY(-50%);font-family:var(--serif);font-size:42px;color:var(--ivory);opacity:.55;cursor:pointer;padding:18px 22px;user-select:none;transition:opacity .3s}
+#lb .nav:hover{opacity:1}
+#lb .prev{left:clamp(6px,2vw,28px)}
+#lb .next{right:clamp(6px,2vw,28px)}
+
+/* ════════ VEIL / MISC ════════ */
+#veil{position:fixed;inset:0;z-index:90;background:var(--bg3);opacity:0;pointer-events:none;transition:opacity .25s linear}
+#veil.show{opacity:1}
+footer-spacer{display:block;height:1px}
+
+@media (max-width:900px){
+  #deck>.label{top:84px!important}
+  #deck .count{top:88px!important}
+  #story .grid,#begin .panel,#menu .wrap{grid-template-columns:1fr}
+  #stats{grid-template-columns:repeat(2,1fr);gap:34px 18px}
+
+  #rail a .nm{display:none}
+  #rail{gap:13px;right:12px}
+  form .frow{grid-template-columns:1fr}
+  .deck-card .row2{align-items:flex-start;flex-direction:column}
+  #gal .cols{columns:2 150px}
+  #hero h1{font-size:clamp(46px,13.4vw,84px)}
+  .chip{height:58px;min-width:110px;padding:10px 18px;border-radius:11px!important}
+  .chip img{max-height:32px}
+}
+@media (prefers-reduced-motion:reduce){
+  .sw>span{transform:none;opacity:1;transition:none}
+  [data-reveal]{opacity:1;transform:none;transition:none}
+  #strip .lane,#digits .lane,.marq .lane{animation:none}
+  #scroll-cue .stem i{animation:none}
+}
+</style>
+</head>
+<body class="loading">
+<div id="bgfade"></div>
+<canvas id="bgstage"></canvas>
+<div id="grain"></div>
+
+<div id="loader" aria-hidden="true">
+  <canvas id="curtain"></canvas>
+  <div class="loader-mark">
+    <div class="greet serif">Welcome to Curtain Drop Media</div>
+    <div class="rod"><i></i></div>
+    <div class="tag">RAISING THE CURTAIN</div>
+    <button class="enter" type="button" aria-label="Enter the site"><span class="et">Scroll to enter</span><span class="ea"><i></i><i></i></span></button>
+  </div>
+  <div class="pct">0</div>
+</div>
+
+<header>
+  <a class="wordmark" href="#hero" data-to="#hero">C <b>D</b> M</a>
+  <div class="head-right">
+    <a class="head-cta rollhost" href="#begin" data-to="#begin"><span class="roll"><span class="rt">Let's talk</span><span class="rc">Let's talk</span></span><span class="arr">&rarr;</span></a>
+    <button id="menu-btn" aria-label="Menu"><span class="bars"><i></i><i></i></span></button>
+  </div>
+</header>
+
+<div id="menu">
+  <div class="wrap">
+    <nav>
+      <a href="#hero" data-to="#hero"><span>Home</span></a>
+      <a href="#story" data-to="#story"><span>Story</span></a>
+      <a href="#work" data-to="#work"><span>Work</span></a>
+      <a href="#testimonials" data-to="#testimonials"><span>Reviews</span></a>
+      <a href="#begin" data-to="#begin"><span>Contact</span></a>
+    </nav>
+    <div class="sub">
+      <span class="gt">GALLERIES</span>
+      <a href="#" data-gal="ecom">E-Commerce</a>
+      <a href="#" data-gal="travel">Travel &amp; Experience</a>
+      <a href="#" data-gal="portrait">Portrait</a>
+      <a href="#" data-gal="wedding">Wedding</a>
+      <a href="#" data-gal="misc">Miscellaneous</a>
+      <span class="gt" style="margin-top:22px">REACH US</span>
+      <a href="mailto:Curtaindropmedia@gmail.com">Curtaindropmedia@gmail.com</a>
+      <a href="https://instagram.com/curtain_drop_media" target="_blank" rel="noopener noreferrer">@curtain_drop_media</a>
+    </div>
+  </div>
+</div>
+
+<nav id="rail" aria-label="Sections">
+  <a href="#hero" data-to="#hero" data-sec="hero"><span class="nm">Open</span><span class="no">0</span></a>
+  <a href="#story" data-to="#story" data-sec="story"><span class="nm">Story</span><span class="no">1</span></a>
+  <a href="#work" data-to="#work" data-sec="work"><span class="nm">Work</span><span class="no">2</span></a>
+  <a href="#craft" data-to="#craft" data-sec="craft"><span class="nm">Craft</span><span class="no">3</span></a>
+  <a href="#testimonials" data-to="#testimonials" data-sec="testimonials"><span class="nm">Reviews</span><span class="no">4</span></a>
+  <a href="#brands" data-to="#brands" data-sec="brands"><span class="nm">Brands</span><span class="no">5</span></a>
+  <a href="#faq" data-to="#faq" data-sec="faq"><span class="nm">Questions</span><span class="no">6</span></a>
+  <a href="#begin" data-to="#begin" data-sec="begin"><span class="nm">Begin</span><span class="no">7</span></a>
+</nav>
+
+<main>
+
+<section id="hero" data-zone="#050505">
+  <div class="wrap">
+    <h1 class="display" data-split>Let's tell your <span class="it">story.</span></h1>
+    <div class="meta" data-reveal style="--dl:.55s">
+      <span><b>Visual storytelling studio</b></span>
+      <span>Maharashtra, India</span>
+      <span>Since 2020</span>
+    </div>
+    <div class="ctas" data-reveal style="--dl:.75s">
+      <a class="btn" href="#begin" data-to="#begin"><span class="roll"><span class="rt">Book a session</span><span class="rc">Book a session</span></span><span class="arr">&rarr;</span></a>
+      <a class="link-plain" href="#work" data-to="#work"><span class="uline">View work</span></a>
+    </div>
+  </div>
+  <div id="scroll-cue"><span>Scroll</span><span class="stem"><i></i></span></div>
+</section>
+
+<section id="story" class="sec" data-zone="#0B0906">
+  <div class="wrap">
+    <div class="head">
+      <div class="label" data-reveal><span class="n">1</span><span class="ln"></span><span>Who we are</span></div>
+    </div>
+    <h2 class="display statement scrub-words">More than a <span class="it">production house.</span></h2>
+    <div class="grid" style="margin-top:clamp(40px,7vh,70px)">
+      <div class="copy body-copy" data-reveal>
+        <p>At Curtain Drop Media, we're passionate about translating your vision into captivating visuals. Our creative journey involves authenticity, innovation, and client success.</p>
+        <p>Whether it's photography, videography, or web design, we're here to elevate your brand. We believe every story deserves to be told beautifully &mdash; let's create magic together.</p>
+      </div>
+      <div class="mission">
+        <div class="row" data-reveal style="--dl:.1s"><span class="no">01</span><span class="tx">Authenticity</span></div>
+        <div class="row" data-reveal style="--dl:.22s"><span class="no">02</span><span class="tx">Innovation</span></div>
+        <div class="row" data-reveal style="--dl:.34s"><span class="no">03</span><span class="tx">Your Success</span></div>
+      </div>
+    </div>
+    <div id="stats">
+      <div class="stat" data-reveal><div class="val"><span class="odo" data-odo="6"></span><span class="sfx">+</span></div><div class="cap">Years in the field</div></div>
+      <div class="stat" data-reveal style="--dl:.12s"><div class="val"><span class="odo" data-odo="300"></span><span class="sfx">+</span></div><div class="cap">Projects delivered</div></div>
+      <div class="stat" data-reveal style="--dl:.24s"><div class="val"><span class="odo" data-odo="40"></span><span class="sfx">+</span></div><div class="cap">Brands trusted us</div></div>
+      <div class="stat" data-reveal style="--dl:.36s"><div class="val"><span class="odo" data-odo="85"></span><span class="sfx">%</span></div><div class="cap">Clients return</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="work" data-zone="#030303">
+  <div id="deck-wrapper">
+    <!-- Left Navigation with Thumbnails -->
+    <div class="deck-nav">
+      <div class="deck-nav-item active" data-index="0">
+        <span class="num">01</span><span class="line"></span>
+        <div class="deck-thumb active"><img src="assets/work/thumb/7c663828-e514-49ce-ad3a-27ca8a400afe.webp" alt="Thumb 1"></div>
+      </div>
+      <div class="deck-nav-item" data-index="1">
+        <span class="num">02</span><span class="line"></span>
+        <div class="deck-thumb"><img src="assets/work/thumb/e6b83c12-691a-4c73-a0e7-4de269314791.webp" alt="Thumb 2"></div>
+      </div>
+      <div class="deck-nav-item" data-index="2">
+        <span class="num">03</span><span class="line"></span>
+        <div class="deck-thumb"><img src="assets/work/thumb/c3daa8e3-8fa3-40fd-a3a4-86a7fbbf67f1.webp" alt="Thumb 3"></div>
+      </div>
+      <div class="deck-nav-item" data-index="3">
+        <span class="num">04</span><span class="line"></span>
+        <div class="deck-thumb"><img src="assets/work/thumb/a6b5c850-cbfe-4e7e-8465-6d79c0f55499.webp" alt="Thumb 4"></div>
+      </div>
+      <div class="deck-nav-item" data-index="4">
+        <span class="num">05</span><span class="line"></span>
+        <div class="deck-thumb"><img src="assets/work/thumb/423e5444-b1ae-4ba8-9f2c-84ef1c183e8a.webp" alt="Thumb 5"></div>
+      </div>
+    </div>
+
+    <!-- Center Stage -->
+    <div class="deck-stage">
+      <div class="deck-stage-inner">
+        <!-- Images -->
+        <div class="deck-image active" style="background-image: url('assets/work/7c663828-e514-49ce-ad3a-27ca8a400afe.webp')"></div>
+        <div class="deck-image" style="background-image: url('assets/work/e6b83c12-691a-4c73-a0e7-4de269314791.webp')"></div>
+        <div class="deck-image" style="background-image: url('assets/work/c3daa8e3-8fa3-40fd-a3a4-86a7fbbf67f1.webp')"></div>
+        <div class="deck-image" style="background-image: url('assets/work/a6b5c850-cbfe-4e7e-8465-6d79c0f55499.webp')"></div>
+        <div class="deck-image" style="background-image: url('assets/work/423e5444-b1ae-4ba8-9f2c-84ef1c183e8a.webp')"></div>
+
+        <!-- Titles -->
+        <div class="deck-titles">
+          <h2 class="active"><a href="#" data-gal="ecom">E-Commerce</a></h2>
+          <h2><a href="#" data-gal="travel">Travel &amp;<br>Experience</a></h2>
+          <h2><a href="#" data-gal="portrait">Portrait</a></h2>
+          <h2><a href="#" data-gal="wedding">Weddings</a></h2>
+          <h2><a href="#" data-gal="misc">Miscellaneous</a></h2>
+        </div>
+
+        <!-- gallery affordance: whole stage is clickable; this is the visible cue -->
+        <button type="button" class="deck-cta" aria-label="View full gallery for this category">
+          <span class="dc-label">View gallery</span><span class="dc-count" id="deck-cta-count"></span><span class="dc-arrow" aria-hidden="true">&rarr;</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="craft" class="sec" data-zone="#050505">
+  <div class="wrap">
+    <div class="head">
+      <div class="label" data-reveal><span class="n">3</span><span class="ln"></span><span>What we offer</span></div>
+    </div>
+    <div class="rows">
+      <div class="craft-row" data-reveal>
+        <span class="no">01</span>
+        <h3>Photography</h3>
+        <ul>
+          <li>Commercial &amp; product<div class="rv rv-back"><div class="rv-inner"><img src="assets/work/thumb/7c663828-e514-49ce-ad3a-27ca8a400afe.webp" alt="" loading="lazy"></div></div><div class="rv rv-front"><div class="rv-inner"><img src="assets/work/thumb/932c08b5-4acc-4aeb-886f-03f1604e37a4.webp" alt="" loading="lazy"></div></div></li>
+          <li>Editorial &amp; fashion<div class="rv rv-back"><div class="rv-inner"><img src="assets/work/thumb/72cb3960-740b-4819-9b0a-2783ed3045da.webp" alt="" loading="lazy"></div></div><div class="rv rv-front"><div class="rv-inner"><img src="assets/work/thumb/a99103e0-286c-4878-b088-25d94273ee85.webp" alt="" loading="lazy"></div></div></li>
+          <li>Portrait<div class="rv rv-back"><div class="rv-inner"><img src="assets/work/thumb/3e74ed4f-423a-462c-b9ce-9adf0cd5555d.webp" alt="" loading="lazy"></div></div><div class="rv rv-front"><div class="rv-inner"><img src="assets/work/thumb/c3daa8e3-8fa3-40fd-a3a4-86a7fbbf67f1.webp" alt="" loading="lazy"></div></div></li>
+          <li>Events<div class="rv rv-back"><div class="rv-inner"><img src="assets/work/thumb/423e5444-b1ae-4ba8-9f2c-84ef1c183e8a.webp" alt="" loading="lazy"></div></div><div class="rv rv-front"><div class="rv-inner"><img src="assets/work/thumb/b9ad1bf7-89e0-4c12-8c3f-419e9c1a771f.webp" alt="" loading="lazy"></div></div></li>
+          <li>E-commerce catalogues<div class="rv rv-back"><div class="rv-inner"><img src="assets/work/thumb/7848a004-c446-46ff-bdc6-2f00d99c0c70.webp" alt="" loading="lazy"></div></div><div class="rv rv-front"><div class="rv-inner"><img src="assets/work/thumb/8fb541b4-183c-416f-b2b0-c4087080f7d6.webp" alt="" loading="lazy"></div></div></li>
+        </ul>
+      </div>
+      <div class="craft-row" data-reveal>
+        <span class="no">02</span>
+        <h3>Videography</h3>
+        <ul>
+          <li>Wedding films<div class="rv rv-back"><div class="rv-inner"><img src="assets/work/thumb/88cd7160-a4de-4307-9c8c-1af01e66a030.webp" alt="" loading="lazy"></div></div><div class="rv rv-front"><div class="rv-inner"><img src="assets/work/thumb/a6b5c850-cbfe-4e7e-8465-6d79c0f55499.webp" alt="" loading="lazy"></div></div></li>
+          <li>Brand videos &amp; commercials<div class="rv rv-back"><div class="rv-inner"><img src="assets/work/thumb/87e0efab-6ffc-40d8-82b2-1510bcaefe49.webp" alt="" loading="lazy"></div></div><div class="rv rv-front"><div class="rv-inner"><img src="assets/work/thumb/ffc4e8b9-996c-4bb3-909d-ae9132060984.webp" alt="" loading="lazy"></div></div></li>
+          <li>Reels &amp; social content<div class="rv rv-back"><div class="rv-inner"><img src="assets/work/thumb/0af2cf47-8a28-421c-96e5-e4c539e66f34.webp" alt="" loading="lazy"></div></div><div class="rv rv-front"><div class="rv-inner"><img src="assets/work/thumb/f840c11f-de9a-4b41-b778-0ea3759fa257.webp" alt="" loading="lazy"></div></div></li>
+          <li>Travel documentaries<div class="rv rv-back"><div class="rv-inner"><img src="assets/work/thumb/0711a238-2a2d-4e35-80a0-f3adaa257e92.webp" alt="" loading="lazy"></div></div><div class="rv rv-front"><div class="rv-inner"><img src="assets/work/thumb/4965cfe1-d271-4c18-99df-79c60093f7db.webp" alt="" loading="lazy"></div></div></li>
+        </ul>
+      </div>
+      <div class="craft-row" data-reveal>
+        <span class="no">03</span>
+        <h3>Brand &amp; Web</h3>
+        <ul>
+          <li>Brand identity systems<div class="rv rv-back"><div class="rv-inner"><img src="assets/work/thumb/87e0efab-6ffc-40d8-82b2-1510bcaefe49.webp" alt="" loading="lazy"></div></div><div class="rv rv-front"><div class="rv-inner"><img src="assets/work/thumb/7c663828-e514-49ce-ad3a-27ca8a400afe.webp" alt="" loading="lazy"></div></div></li>
+          <li>Logo design<div class="rv rv-back"><div class="rv-inner"><img src="assets/work/thumb/ffc4e8b9-996c-4bb3-909d-ae9132060984.webp" alt="" loading="lazy"></div></div><div class="rv rv-front"><div class="rv-inner"><img src="assets/work/thumb/423e5444-b1ae-4ba8-9f2c-84ef1c183e8a.webp" alt="" loading="lazy"></div></div></li>
+          <li>Web design<div class="rv rv-back"><div class="rv-inner"><img src="assets/work/thumb/8fb541b4-183c-416f-b2b0-c4087080f7d6.webp" alt="" loading="lazy"></div></div><div class="rv rv-front"><div class="rv-inner"><img src="assets/work/thumb/932c08b5-4acc-4aeb-886f-03f1604e37a4.webp" alt="" loading="lazy"></div></div></li>
+          <li>Launch campaigns<div class="rv rv-back"><div class="rv-inner"><img src="assets/work/thumb/913042f6-b0f3-4ec0-975b-c14a7a66c029.webp" alt="" loading="lazy"></div></div><div class="rv rv-front"><div class="rv-inner"><img src="assets/work/thumb/e6b83c12-691a-4c73-a0e7-4de269314791.webp" alt="" loading="lazy"></div></div></li>
+        </ul>
+      </div>
+    </div>
+    <div id="frameline" data-reveal>
+      <p class="display serif"><span class="w">We</span> <span class="w">frame</span> <span class="w">the</span> <span class="w">world</span> <span class="w gold it">your</span> <span class="w gold it">way.</span></p>
+    </div>
+  </div>
+</section>
+
+<section id="frames" data-zone="#0B0906">
+  <div id="fanstage">
+    <div class="head">
+      <div class="label" style="justify-content:center"><span class="ln"></span><span>Signature frames</span><span class="ln"></span></div>
+    </div>
+    <div class="fan-card" data-fi="0"><img loading="lazy" src="assets/work/7c663828-e514-49ce-ad3a-27ca8a400afe.webp" alt="E-commerce signature frame"><span class="cap">E-Commerce &middot; 01</span></div>
+    <div class="fan-card" data-fi="1"><img loading="lazy" src="assets/work/e6b83c12-691a-4c73-a0e7-4de269314791.webp" alt="Travel signature frame"><span class="cap">Travel &middot; 02</span></div>
+    <div class="fan-card" data-fi="2"><img loading="lazy" src="assets/work/a99103e0-286c-4878-b088-25d94273ee85.webp" alt="Portrait signature frame"><span class="cap">Portrait &middot; 03</span></div>
+    <div class="fan-card" data-fi="3"><img loading="lazy" src="assets/work/43809a63-2eaf-49d3-b907-3794543998a1.webp" alt="Wedding signature frame"><span class="cap">Wedding &middot; 04</span></div>
+    <div class="fan-card" data-fi="4"><img loading="lazy" src="assets/work/ffc4e8b9-996c-4bb3-909d-ae9132060984.webp" alt="Event signature frame"><span class="cap">Events &middot; 05</span></div>
+    <div class="fan-card" data-fi="5"><img loading="lazy" src="assets/work/913042f6-b0f3-4ec0-975b-c14a7a66c029.webp" alt="Experience signature frame"><span class="cap">Experience &middot; 06</span></div>
+    <div class="fan-card" data-fi="6"><img loading="lazy" src="assets/work/88cd7160-a4de-4307-9c8c-1af01e66a030.webp" alt="Celebration signature frame"><span class="cap">Celebration &middot; 07</span></div>
+  </div>
+</section>
+
+
+
+
+<section id="testimonials" data-zone="#0B0906">
+  <div class="reel-panel">
+    <div class="wrap reel-head">
+      <div class="label" data-reveal><span class="n">4</span><span class="ln"></span><span>Testimonials</span></div>
+      <h2 class="display statement scrub-words" style="margin-top:clamp(20px,3.4vh,34px)">Client <span class="it">love.</span></h2>
+      <p class="kick" data-reveal style="--dl:.15s">Roll the reel &mdash; a few frames from the people we&rsquo;ve built, shot and branded for.</p>
+    </div>
+    <div class="reel-strip">
+      <div class="reel-perf top" id="reel-perf-top"></div>
+      <div class="reel-viewport">
+        <div class="reel-track" id="reel-track"></div>
+      </div>
+      <div class="reel-perf bottom" id="reel-perf-bottom"></div>
+      <div class="reel-gate"></div>
+    </div>
+    <div class="reel-counter">
+      <span class="fc" id="reel-num">01</span>
+      <span class="sep"></span>
+      <span>Frame</span>
+      <span class="sep"></span>
+      <span id="reel-of">05</span>
+    </div>
+  </div>
+</section>
+<section id="brands" class="sec" data-zone="#050505">
+  <div class="wrap">
+    <div class="head" style="margin-bottom:0">
+      <div class="label" data-reveal><span class="n">5</span><span class="ln"></span><span>They trust us</span></div>
+      <h2 class="display statement" style="margin-top:clamp(20px,3.4vh,34px)" data-split>40+ brands <span class="it">&amp; counting.</span></h2>
+      <p class="body-copy" data-reveal style="margin-top:24px">From national institutions to independent labels &mdash; we've been fortunate to shoot, build and brand across industries.</p>
+      <div class="feat" data-reveal>
+        <span>Marriott International<i>Hospitality</i></span>
+        <span>UFC<i>Sports</i></span>
+        <span>Bank of Baroda<i>Banking</i></span>
+        <span>Jio World Drive<i>Retail</i></span>
+        <span>Manish Malhotra<i>Fashion</i></span>
+      </div>
+    </div>
+  </div>
+  <div class="marq" style="--spd:46s"><div class="lane" id="marq1"></div></div>
+  <div class="marq rev" style="--spd:60s"><div class="lane" id="marq2"></div></div>
+</section>
+
+<section id="faq" class="sec" data-zone="#0B0906">
+  <div class="wrap">
+    <div class="head">
+      <div class="label" data-reveal><span class="n">6</span><span class="ln"></span><span>Questions</span></div>
+      <h2 class="display statement" style="margin-top:clamp(20px,3.4vh,34px)" data-split>Before the <span class="it">first take.</span></h2>
+    </div>
+    <div class="qa" data-reveal>
+      <button class="q"><span class="no">01</span><h3>What services do you offer?</h3><span class="pm">+</span></button>
+      <div class="a"><p>Photography, videography, web design, and brand development. Whether you need stunning visuals or a complete brand makeover, we've got you covered.</p></div>
+    </div>
+    <div class="qa" data-reveal>
+      <button class="q"><span class="no">02</span><h3>How can I book your services?</h3><span class="pm">+</span></button>
+      <div class="a"><p>Reach out via the contact section below or our social channels. We'll discuss requirements, provide a customized quote, and schedule at a convenient time.</p></div>
+    </div>
+    <div class="qa" data-reveal>
+      <button class="q"><span class="no">03</span><h3>Do you offer pre-wedding and fashion shoots?</h3><span class="pm">+</span></button>
+      <div class="a"><p>Absolutely! Our outdoor studio features various traditional and international sets, perfect for pre-wedding and fashion shoots against stunning backdrops.</p></div>
+    </div>
+    <div class="qa" data-reveal>
+      <button class="q"><span class="no">04</span><h3>Can you help with branding and logo design?</h3><span class="pm">+</span></button>
+      <div class="a"><p>Yes! Branding is our forte. From logo design to full brand identity systems, we ensure your business stands out in the market.</p></div>
+    </div>
+    <div class="qa" data-reveal>
+      <button class="q"><span class="no">05</span><h3>What is the turnaround time?</h3><span class="pm">+</span></button>
+      <div class="a"><p>Turnaround times vary based on scope. We discuss timelines during the initial consultation so there are no surprises.</p></div>
+    </div>
+    <div class="qa" data-reveal>
+      <button class="q"><span class="no">06</span><h3>Do you shoot outside Maharashtra?</h3><span class="pm">+</span></button>
+      <div class="a"><p>Yes, we are available for destination shoots across India. Travel costs are discussed and included in the project quote.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="begin" class="sec" data-zone="#030303">
+  <div class="wrap">
+    <div class="label" style="justify-content:center" data-reveal><span class="ln"></span><span class="n">READY?</span><span class="ln"></span></div>
+    <h2 class="display big" style="margin-top:clamp(26px,5vh,46px)" data-reveal>Let's create <span id="cycle"><span>stories</span><span>magic</span><span>brands</span><span>forever</span><span>stories</span></span><br>together.</h2>
+    <p class="sub" data-reveal>Tell us your vision and we'll bring it to life &mdash; frame by frame.</p>
+
+    <div class="panel">
+      <div class="cons" data-reveal>
+        <div class="con-row"><span class="k">Email</span><a href="mailto:Curtaindropmedia@gmail.com"><span class="uline">Curtaindropmedia@gmail.com</span></a></div>
+        <div class="con-row"><span class="k">Phone</span><a href="tel:+917219587712"><span class="uline">+91 7219 587 712</span></a></div>
+        <div class="con-row"><span class="k">Phone</span><a href="tel:+918952879799"><span class="uline">+91 8952 879 799</span></a></div>
+        <div class="con-row"><span class="k">Instagram</span><a href="https://instagram.com/curtain_drop_media" target="_blank" rel="noopener noreferrer"><span class="uline">@curtain_drop_media</span></a></div>
+        <div class="con-row"><span class="k">Studio</span><a as="span" style="cursor:default">Maharashtra, India</a></div>
+      </div>
+      <form id="enquire" data-reveal>
+        <div class="frow">
+          <div class="ctl"><label for="f-name">Name</label><input id="f-name" name="name" type="text" autocomplete="name" required></div>
+          <div class="ctl"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
+        </div>
+        <div class="frow">
+          <div class="ctl" style="grid-column:1/-1"><label for="f-service">Service</label>
+            <select id="f-service" name="service">
+              <option>Photography</option>
+              <option>Videography</option>
+              <option>E-Commerce shoot</option>
+              <option>Brand identity</option>
+              <option>Web design</option>
+              <option>Pre-wedding &amp; fashion</option>
+              <option>Something else</option>
+            </select>
+          </div>
+        </div>
+        <div class="ctl"><label for="f-msg">Your vision</label><textarea id="f-msg" name="message" rows="3"></textarea></div>
+        <button class="btn send" type="submit"><span class="roll"><span class="rt">Raise the curtain</span><span class="rc">Raise the curtain</span></span><span class="arr">&rarr;</span></button>
+        <p style="margin-top:14px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">Opens your email app &mdash; nothing is sent until you hit send.</p>
+      </form>
+    </div>
+
+    <div class="endmark">
+      <div class="cdm" data-reveal>C <b>D</b> M</div>
+      <div class="legal">
+        <span>&copy; 2026 Curtain Drop Media. All rights reserved.</span>
+        <nav>
+          <a href="#hero" data-to="#hero">Home</a>
+          <a href="#work" data-to="#work">Work</a>
+          <a href="#story" data-to="#story">Story</a>
+          <a href="#begin" data-to="#begin">Contact</a>
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div id="gal" aria-modal="true" role="dialog" data-lenis-prevent>
+  <div class="bar">
+    <div class="t" id="gal-title">Gallery<i id="gal-count"></i></div>
+    <button id="gal-close"><span class="roll"><span class="rt">Close</span><span class="rc">Close</span></span></button>
+  </div>
+  <div class="cols" id="gal-cols"></div>
+</div>
+<div id="lb" aria-modal="true" role="dialog" data-lenis-prevent>
+  <span class="nav prev" id="lb-prev">&#8249;</span>
+  <img id="lb-img" alt="">
+  <span class="nav next" id="lb-next">&#8250;</span>
+  <button class="x" id="lb-close">Close</button>
+</div>
+
+<div id="veil"></div>
+
+<style>
+@media (max-width:900px){
+  #studio .casc{height:auto;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .casc-img{position:static!important;width:100%!important;aspect-ratio:3/4!important}
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer crossorigin="anonymous" integrity="sha384-g4NTh/Iv5PPU4xPyhEWqPcwtNXOvdaDI8LLnyYfyNZOjKJeYQyjzQ9X5275eBjpt" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer crossorigin="anonymous" integrity="sha384-Z3REaz79l2IaAZqJsSABtTbhjgOUYyV3p90XNnAPCSHg3EMTz1fouunq9WZRtj3d" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer crossorigin="anonymous" integrity="sha384-B2WBjDzEjJpYvhmi2UyEn7rektqkf5suS6sNoyyrf0EBAwBHdkiXxIlU0V5Ru2ed" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.149.0/three.min.js" defer crossorigin="anonymous" integrity="sha384-RRHfJ6w1mTlKUBMYT/hvnRiOzEB/vyRV3DrQOseb6oYfvaZSfdd0byS4bHps0k2R" referrerpolicy="no-referrer"></script>
+<script>
+const GALLERIES = {"ecom": {"title": "E-Commerce", "images": ["assets/work/8fb541b4-183c-416f-b2b0-c4087080f7d6.webp", "assets/work/932c08b5-4acc-4aeb-886f-03f1604e37a4.webp", "assets/work/7c663828-e514-49ce-ad3a-27ca8a400afe.webp", "assets/work/aa73077a-4eb6-44ed-b90e-e18c23253935.webp", "assets/work/87e0efab-6ffc-40d8-82b2-1510bcaefe49.webp", "assets/work/7848a004-c446-46ff-bdc6-2f00d99c0c70.webp", "assets/work/c884692c-166f-419c-bb0e-2bb5639f53e3.webp", "assets/work/cf6cd67b-038a-42e8-bbaa-dbcbba640679.webp", "assets/work/6a12b161-11fd-4a31-a50b-dfbf69c2e6bc.webp", "assets/work/7dfb4af5-1313-417b-93eb-4fe06a502ee5.webp", "assets/work/148197b0-7d95-4f4c-97ea-28f28fcc9923.webp", "assets/work/9b7b640b-ce19-454d-84fe-37c4f1941417.webp", "assets/work/d39bb4f4-093f-4c3e-9288-1755d6e63572.webp", "assets/work/4157f0da-8d1f-4feb-82e1-1594e17a2c12.webp", "assets/work/4bf8c141-3694-4f78-a524-a0ff35beed95.webp", "assets/work/9c4ceb83-3b55-41a5-8060-1ed8ac809703.webp", "assets/work/b465c547-2fa6-4efd-87f5-764b98aae983.webp", "assets/work/f81d12c0-6295-4bf3-a844-0ba40f54c06f.webp", "assets/work/c6a4453b-cfab-4ed0-b31e-3f62f03c2b8e.webp", "assets/work/ac206031-f6d5-45e8-be35-6fb5ab1c5d8a.webp", "assets/work/133ee63b-de88-40da-aff7-7f71046e111d.webp", "assets/work/44e68d18-ffcc-4b9d-96ad-ab7c51a8879d.webp", "assets/work/ca33329d-459a-4b5e-9adc-832fb6d5e9fd.webp", "assets/work/a8a288b9-ab94-4f09-a4de-f3f58f4175c5.webp", "assets/work/1aa75084-ba51-4aa7-a3ad-04be35ef9703.webp", "assets/work/27e19518-c24b-4afa-b747-9b66f6d7f6bd.webp", "assets/work/6a60cf06-18ce-4a6d-bbc8-bdcb949e7abb.webp", "assets/work/551b80aa-00df-4b39-ae79-477145226f5c.webp", "assets/work/e0dbe5b4-9953-428c-baf9-78cf29b06464.webp", "assets/work/f28d28b5-0cb2-49e9-a4ec-ac31ede72d18.webp", "assets/work/4be44e38-b171-46d3-84c7-11c3d092da0f.webp", "assets/work/f9120a64-b694-4bcb-a831-be01074b0e9c.webp", "assets/work/3ad7dcb5-1b73-4741-a2a5-b4b7771a05f3.webp", "assets/work/3a21d968-8246-40c0-b4c3-e6338b99e9ef.webp", "assets/work/783c4ae0-9b61-4144-8f42-7703ed203f41.webp", "assets/work/ae2835fa-6afd-4aac-9097-94c7734c3657.webp", "assets/work/1013303f-d143-450b-8d78-50a7fbad1582.webp"]}, "travel": {"title": "Travel & Experience", "images": ["assets/work/4965cfe1-d271-4c18-99df-79c60093f7db.webp", "assets/work/2de5bae6-3cc3-47da-bc33-a4abe349437e.webp", "assets/work/5b5b3cdb-e109-46f9-b37d-89a97197dfc9.webp", "assets/work/e6b83c12-691a-4c73-a0e7-4de269314791.webp", "assets/work/75657bd4-87be-4736-a606-ec3a11e27d89.webp", "assets/work/0711a238-2a2d-4e35-80a0-f3adaa257e92.webp", "assets/work/913042f6-b0f3-4ec0-975b-c14a7a66c029.webp", "assets/work/204a17b6-4bb0-48bd-ba5f-1087f3fa4912.webp", "assets/work/6d17597c-fbb6-4c8b-a675-328aa04169d6.webp", "assets/work/09bed7f2-33bf-4686-a63a-b9ebf54c5572.webp", "assets/work/abb76463-2054-4860-9189-f79d9500911a.webp", "assets/work/e848299e-1b80-4d36-99a0-a5478e856e14.webp", "assets/work/19461214-bd4c-437a-96b0-8e82b89d186e.webp", "assets/work/b12342ce-65a3-45ab-a4c3-cffd9a3a5ccb.webp", "assets/work/463455cb-1735-4e68-9115-68a02e5f6d5d.webp", "assets/work/8508d56a-b6ff-4fcb-a62b-c1dfd4669d5e.webp", "assets/work/25156c0f-9968-4a42-9b0f-f82cbb9830dc.webp", "assets/work/aba0634f-b0dc-492d-9182-20d7e5108482.webp", "assets/work/364f750a-ecc4-4a96-908f-730d5112277e.webp", "assets/work/eee95be2-3817-42d4-bb71-ce800f45eafa.webp", "assets/work/30bf987b-07c1-4934-9f6a-809b69bb9385.webp", "assets/work/03a504b6-1190-4f27-9910-130c832d7d58.webp", "assets/work/23707e0a-685e-47da-bd42-9a4c25cd1067.webp", "assets/work/2c91d370-d721-4d30-933b-1b14def38e21.webp", "assets/work/c1448011-aa8b-40a5-a984-b5270eda1859.webp", "assets/work/88f417d3-8773-46da-a946-fd46252a082c.webp"]}, "portrait": {"title": "Portrait", "images": ["assets/work/8a76e3ca-b1ea-4fba-9de9-13aed4e31889.webp", "assets/work/c3daa8e3-8fa3-40fd-a3a4-86a7fbbf67f1.webp", "assets/work/72cb3960-740b-4819-9b0a-2783ed3045da.webp", "assets/work/3e607cd0-326b-4004-9d9a-0df0116471b4.webp", "assets/work/a99103e0-286c-4878-b088-25d94273ee85.webp", "assets/work/3e74ed4f-423a-462c-b9ce-9adf0cd5555d.webp", "assets/work/91c02e34-864f-4ae1-a6ce-49a398172024.webp", "assets/work/c8f9733b-c90f-469d-b03d-10e258bc6d2e.webp", "assets/work/9dd8cdb3-c68b-437a-a0fa-6dfd130454f9.webp", "assets/work/19f7afd6-3df6-4475-b01d-e49e6f2368e2.webp", "assets/work/f6e1f787-e090-4d81-96c6-d09abc8b60eb.webp", "assets/work/c39e3f14-35c2-4974-a2f7-eb56f765cc26.webp", "assets/work/bb15a7e6-7bf7-4230-8bae-14aedc9daa01.webp", "assets/work/f1940876-cf28-43b7-bd71-d2a25dec39f3.webp", "assets/work/d4aabeab-f375-4e4a-96c2-e76eed6725cc.webp", "assets/work/cce88480-cad5-42db-9054-955f13cdc7dc.webp"]}, "wedding": {"title": "Weddings", "images": ["assets/work/a6b5c850-cbfe-4e7e-8465-6d79c0f55499.webp", "assets/work/88cd7160-a4de-4307-9c8c-1af01e66a030.webp", "assets/work/dd07ae66-bfc1-4ad3-8fab-ba1b5de90bfb.webp", "assets/work/43809a63-2eaf-49d3-b907-3794543998a1.webp", "assets/work/e3e7e392-1d3a-486d-8693-58ef77291f46.webp", "assets/work/97579a33-3990-4e70-9074-4738e78d3e3c.webp", "assets/work/b9ad1bf7-89e0-4c12-8c3f-419e9c1a771f.webp", "assets/work/de6d46f3-92c0-4196-81cb-9b597ff214fa.webp", "assets/work/046ec138-68aa-4f32-b3d2-5c85e7ae385d.webp", "assets/work/87e5f3b0-5c56-401e-a331-cac9d10ab9ad.webp", "assets/work/7993db86-d808-4627-bd92-e1f003d55a0b.webp"]}, "misc": {"title": "Miscellaneous", "images": ["assets/work/423e5444-b1ae-4ba8-9f2c-84ef1c183e8a.webp", "assets/work/0af2cf47-8a28-421c-96e5-e4c539e66f34.webp", "assets/work/09ca9ff3-c311-4583-b622-e1f5a011e5b8.webp", "assets/work/09f138b4-60ff-4380-a119-94de35398d13.webp", "assets/work/ffc4e8b9-996c-4bb3-909d-ae9132060984.webp", "assets/work/cc1432a9-7ecd-4829-9c8e-6de4bac86e8f.webp", "assets/work/f840c11f-de9a-4b41-b778-0ea3759fa257.webp", "assets/work/e4944f93-0069-4f70-a3b3-8e21257baae5.webp", "assets/work/ce778af9-05db-4407-add8-38f4041c45e1.webp", "assets/work/2f2bb2f5-53f8-4b75-868f-3c3fb1df4614.webp", "assets/work/31cc3ec0-a3a7-4833-b1e7-474b75aafeec.webp", "assets/work/ac75e03e-e4e3-44b9-afd7-e5085bfd5dac.webp", "assets/work/337f55e6-1e45-45e8-a3d8-5e5c2ca5fdac.webp", "assets/work/15c68692-8e7a-44e8-8c90-bc77f2f594aa.webp", "assets/work/2affbfea-31e4-4489-b094-f0387773f5ba.webp", "assets/work/a585bddb-1ec8-4f3c-92f4-734958daae6e.webp", "assets/work/a8e79739-76fc-422b-b336-b491c75654a1.webp", "assets/work/985b7431-e8f0-4b77-bce5-1ace665c7da7.webp", "assets/work/c340f40f-c9eb-4057-bcc3-9aec6da596b7.webp", "assets/work/fee65c08-e41c-4eb1-b638-e7b39432c0f8.webp", "assets/work/19a63785-286b-46e2-9b8d-48ad5347b381.webp"]}};
+const LOGOS = ["AH International.png", "AICAT.png", "Ace the Exam.png", "Anurag Palace.png", "Bank Of Baroda.png", "Beneci.png", "Bloop Skincare.webp", "Face Magzine.png", "House Of Beans.png", "LUXE Surfaces.png", "Liberty One.png", "Life Changing Astro.png", "Mad King.png", "Mahal Jewells.png", "Manish Malhotra.png", "Marriott.png", "Mirayaz.png", "NGMA-alt.png", "NGMA.png", "Netralaya.png", "Pratap Elegance.png", "Pune Time Fashion Week.png", "Retro Future.png", "SKIT.png", "Sawdeshi Jagaran Manch.png", "Skinwood.jpg", "Smith Jewells.png", "Sunsilk.png", "Sutra Clothing.png", "THE ACE CLUB.png", "UFC Gym.png", "VOID Events.png", "Vasansi.png", "Vishnu Delight.png", "Vvyom.png", "elite miss rajasthan.png"];
+
+document.addEventListener('DOMContentLoaded', function () {
+  'use strict';
+  gsap.registerPlugin(ScrollTrigger);
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const desktop = window.matchMedia('(min-width: 901px)').matches;
+
+  /* ── film grain ── */
+  document.getElementById('grain').style.backgroundImage =
+    "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.42'/%3E%3C/svg%3E\")";
+
+  /* ── Lenis smooth scroll ── */
+  let lenis = null;
+  if (!reduced && typeof Lenis !== 'undefined') {
+    lenis = new Lenis({ duration: 0.65, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(t => lenis.raf(t * 1000));
+    gsap.ticker.lagSmoothing(0);
+    lenis.stop();
+    window.__lenis = lenis;
+  }
+  (function(){
+    const cue = document.getElementById('scroll-cue');
+    const hero = document.getElementById('hero');
+    if (!cue || !hero) return;
+    new IntersectionObserver(([entry]) => {
+      cue.classList.toggle('gone', !entry.isIntersecting);
+    }, { threshold: 0.05 }).observe(hero);
+  })();
+  function scrollTo(target) {
+    if (lenis) lenis.scrollTo(target, { duration: 1.6 });
+    else document.querySelector(target)?.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' });
+  }
+  document.querySelectorAll('[data-to]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      closeMenu();
+      scrollTo(a.getAttribute('data-to'));
+    });
+  });
+
+  /* ── split-word reveals ── */
+  function splitWords(el, scrub) {
+    const out = [];
+    (function walk(node) {
+      [...node.childNodes].forEach(ch => {
+        if (ch.nodeType === 3) {
+          const frag = document.createDocumentFragment();
+          ch.textContent.split(/(\s+)/).forEach(tok => {
+            if (!tok) return;
+            if (/^\s+$/.test(tok)) { frag.appendChild(document.createTextNode(' ')); return; }
+            if (scrub) {
+              const w = document.createElement('span');
+              w.className = 'scw'; w.style.display = 'inline-block'; w.textContent = tok;
+              frag.appendChild(w); out.push(w);
+            } else {
+              const o = document.createElement('span'); o.className = 'sw';
+              const i = document.createElement('span'); i.textContent = tok;
+              o.appendChild(i); frag.appendChild(o); out.push(i);
+            }
+          });
+          node.replaceChild(frag, ch);
+        } else if (ch.nodeType === 1 && !ch.classList.contains('sw')) walk(ch);
+      });
+    })(el);
+    return out;
+  }
+  const heroH1 = document.querySelector('#hero h1');
+  document.querySelectorAll('[data-split]').forEach(el => {
+    const words = splitWords(el, false);
+    words.forEach((w, i) => {
+      w.style.setProperty('--d', (0.55 + Math.random() * 0.25).toFixed(2) + 's');
+      w.style.setProperty('--dl', (i * 0.055 + Math.random() * 0.05).toFixed(2) + 's');
+    });
+  });
+  document.querySelectorAll('.scrub-words').forEach(el => {
+    const words = splitWords(el, true);
+    if (reduced) return;
+    gsap.fromTo(words, { opacity: 0.13 }, {
+      opacity: 1, stagger: 0.08, ease: 'none',
+      scrollTrigger: { trigger: el, start: 'top 80%', end: 'top 32%', scrub: true }
+    });
+  });
+
+  /* ── intersection reveals (hero handled post-loader) ── */
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); }
+  }), { threshold: 0.16 });
+  document.querySelectorAll('[data-reveal],[data-split]').forEach(el => {
+    if (el.closest('#hero')) return;
+    io.observe(el);
+  });
+
+  /* ── section rail + background zones ── */
+  const railLinks = {};
+  document.querySelectorAll('#rail a').forEach(a => railLinks[a.dataset.sec] = a);
+  const bgfade = document.getElementById('bgfade');
+  const railMap = { hero: 'hero', story: 'story', work: 'work', craft: 'craft', frames: 'craft', testimonials: 'testimonials', brands: 'brands', faq: 'faq', begin: 'begin' };
+  /* live rect-based detector — immune to pin spacers shifting layout */
+  const zones = gsap.utils.toArray('section[data-zone]');
+  let zoneCur = null;
+  zones.forEach(s => {
+    ScrollTrigger.create({
+      trigger: s,
+      start: 'top 50%',
+      end: 'bottom 50%',
+      refreshPriority: -1,
+      onToggle: self => {
+        if (self.isActive && zoneCur !== s) {
+          zoneCur = s;
+          bgfade.style.background = s.dataset.zone;
+          window.__stageSection = s.id;
+          const key = railMap[s.id];
+          Object.values(railLinks).forEach(l => l.classList.remove('act'));
+          if (railLinks[key]) railLinks[key].classList.add('act');
+        }
+      }
+    });
+  });
+
+  /* ── count-up stats: replay every time the #stats row re-enters ≥50% view ── */
+  const statsEl = document.getElementById('stats');
+  const odos = statsEl ? [...statsEl.querySelectorAll('.odo')] : [];
+  let countTweens = [];
+  function resetCount() {
+    countTweens.forEach(t => t.kill());
+    countTweens = [];
+    odos.forEach(odo => { odo.textContent = '0'; });
+  }
+  function runCountUp() {
+    countTweens.forEach(t => t.kill());
+    countTweens = [];
+    odos.forEach(odo => {
+      const target = parseInt(odo.dataset.odo, 10);
+      if (reduced) { odo.textContent = target; return; }
+      const obj = { val: 0 };
+      countTweens.push(gsap.to(obj, {
+        val: target,
+        duration: 2.2,
+        ease: 'power2.out',
+        onUpdate() { odo.textContent = Math.round(obj.val); },
+        onComplete() { odo.textContent = target; }
+      }));
+    });
+  }
+  resetCount();
+  if (statsEl) {
+    if (reduced) {
+      runCountUp();
+    } else {
+      let armed = true; // ready to fire on the next entry
+      const statObs = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.intersectionRatio >= 0.5) {
+            // row is at least half in view — count up (once per entry)
+            if (armed) { armed = false; runCountUp(); }
+          } else if (!entry.isIntersecting) {
+            // fully off-screen — reset to 0 (out of sight) and re-arm for next time
+            armed = true;
+            resetCount();
+          }
+        });
+      }, { threshold: [0, 0.25, 0.5, 0.75, 1] });
+      statObs.observe(statsEl);
+    }
+  }
+
+  /* ── work deck: pinned, scrubbed ── */
+  const navItems = gsap.utils.toArray('.deck-nav-item');
+  const images = gsap.utils.toArray('.deck-image');
+  const titles = gsap.utils.toArray('.deck-titles h2');
+  const thumbs = gsap.utils.toArray('.deck-thumb');
+  const totalCards = 5;
+  let activeIdx = 0;
+
+  /* ── WebGL Interactive Mouse Ripple ── */
+  const deckStageInner = document.querySelector('.deck-stage-inner');
+  const deckCanvas = document.createElement('canvas');
+  deckCanvas.style.position = 'absolute';
+  deckCanvas.style.inset = '0';
+  deckCanvas.style.width = '100%';
+  deckCanvas.style.height = '100%';
+  deckCanvas.style.zIndex = '3';
+  deckCanvas.style.pointerEvents = 'auto'; // allow mouse events
+  deckStageInner.appendChild(deckCanvas);
+
+  let deckRenderer, deckScene, deckCamera, deckMat;
+  let deckTextures = [];
+  
+  if (typeof THREE !== 'undefined' && deckCanvas) {
+    deckRenderer = new THREE.WebGLRenderer({ canvas: deckCanvas, alpha: true, antialias: true });
+    deckScene = new THREE.Scene();
+    deckCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+    deckCamera.position.z = 1;
+
+    // Hide CSS images
+    const style = document.createElement('style');
+    style.textContent = '.deck-image.active { opacity: 0 !important; } .deck-image { opacity: 0 !important; }';
+    document.head.appendChild(style);
+
+    const tl = new THREE.TextureLoader();
+    let loadedCount = 0;
+    const imageUrls = images.map(img => {
+       const bg = img.style.backgroundImage;
+       return bg.replace(/^url\(['"]?/, '').replace(/['"]?\)$/, '');
+    });
+
+    imageUrls.forEach((url, i) => {
+      tl.load(url, (tex) => {
+        tex.minFilter = THREE.LinearFilter;
+        tex.magFilter = THREE.LinearFilter;
+        deckTextures[i] = tex;
+        loadedCount++;
+        if (loadedCount === imageUrls.length) initDeckShader();
+      });
+    });
+
+    // ── Tunable look & feel — real-time water sim (edit window.__FX then __applyFX()) ──
+    const FX = {
+      damping:    0.992,  // viscosity: how fast ripples settle (closer to 1 = longer-lived)
+      relax:      0.998,  // surface relaxes back to flat (higher = ripples linger longer)
+      tension:    0.55,   // wave stiffness / propagation speed (higher = faster rings)
+      substeps:   2,      // wave-equation steps per frame (also scales ripple speed)
+      dropRadius: 0.05,   // size of the dimple the cursor pokes into the surface
+      dropForce:  0.14,   // strength of each disturbance
+      refract:    0.55,   // how strongly the surface bends the image
+      normalScale:9.0,    // surface bumpiness used for the lighting normal
+      chroma:     0.10,   // chromatic aberration as a fraction of the refraction
+      spec:       0.55,   // specular glint brightness
+      specPow:    80.0,   // specular tightness (higher = smaller, sharper highlights)
+      dim:        0.66,   // base image brightness
+      dropGap:    0.012,  // spacing of injected drops along a fast cursor path
+      hoverTau:   0.14    // hover fade time-constant (s)
+    };
+
+    // ping-pong height-field render targets (r = height, g = velocity)
+    let SIM_W = 256, SIM_H = 144;
+    let rtA, rtB, simRead, simWrite, simAspect = 0;
+    let simScene, simCamera, simQuad, dropMat, stepMat;
+
+    const makeRT = (w, h) => new THREE.WebGLRenderTarget(w, h, {
+      type: THREE.HalfFloatType, format: THREE.RGBAFormat,
+      minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter,
+      depthBuffer: false, stencilBuffer: false,
+      wrapS: THREE.ClampToEdgeWrapping, wrapT: THREE.ClampToEdgeWrapping
+    });
+
+    // (re)build the sim grid for a given aspect so texels stay square -> round ripples
+    function buildSim(aspect) {
+      SIM_W = 256;
+      SIM_H = Math.max(48, Math.round(SIM_W / aspect));
+      if (rtA) rtA.dispose();
+      if (rtB) rtB.dispose();
+      rtA = makeRT(SIM_W, SIM_H);
+      rtB = makeRT(SIM_W, SIM_H);
+      const prev = deckRenderer.getRenderTarget();
+      deckRenderer.setClearColor(0x000000, 0);
+      deckRenderer.setRenderTarget(rtA); deckRenderer.clear(true, false, false);
+      deckRenderer.setRenderTarget(rtB); deckRenderer.clear(true, false, false);
+      deckRenderer.setRenderTarget(prev);
+      simRead = rtA; simWrite = rtB; simAspect = aspect;
+      const texel = new THREE.Vector2(1 / SIM_W, 1 / SIM_H);
+      if (stepMat) stepMat.uniforms.uTexel.value.copy(texel);
+      if (dropMat) dropMat.uniforms.uAspect.value = SIM_W / SIM_H;
+      if (deckMat) deckMat.uniforms.uTexel.value.copy(texel);
+    }
+
+    let lastMouse = new THREE.Vector2(-1, -1);
+    let targetHover = 0;
+    let currentHover = 0;
+
+    function initDeckShader() {
+      simScene = new THREE.Scene();
+      simCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+      // Pass A — poke a smooth circular dimple into the height field at uDrop
+      dropMat = new THREE.ShaderMaterial({
+        uniforms: {
+          uPrev:   { value: null },
+          uDrop:   { value: new THREE.Vector2(-1, -1) },
+          uAspect: { value: 1.0 },
+          uRadius: { value: FX.dropRadius },
+          uForce:  { value: FX.dropForce }
+        },
+        vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position, 1.0); }',
+        fragmentShader: `
+          varying vec2 vUv;
+          uniform sampler2D uPrev;
+          uniform vec2 uDrop;
+          uniform float uAspect, uRadius, uForce;
+          void main(){
+            vec4 s = texture2D(uPrev, vUv);
+            vec2 p = vUv - uDrop; p.x *= uAspect;        // aspect-correct -> round drop
+            float d = length(p);
+            float drop = (1.0 + cos(min(d / uRadius, 1.0) * 3.14159265)) * 0.5;
+            s.r += drop * uForce;                        // lift the surface locally
+            gl_FragColor = s;
+          }`
+      });
+
+      // Pass B — advance the wave equation one step (r = height, g = velocity)
+      stepMat = new THREE.ShaderMaterial({
+        uniforms: {
+          uPrev:    { value: null },
+          uTexel:   { value: new THREE.Vector2(1 / SIM_W, 1 / SIM_H) },
+          uDamping: { value: FX.damping },
+          uTension: { value: FX.tension },
+          uRelax:   { value: FX.relax }
+        },
+        vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position, 1.0); }',
+        fragmentShader: `
+          varying vec2 vUv;
+          uniform sampler2D uPrev;
+          uniform vec2 uTexel;
+          uniform float uDamping, uTension, uRelax;
+          void main(){
+            vec4 s = texture2D(uPrev, vUv);
+            float h = s.r, v = s.g;
+            float hl = texture2D(uPrev, vUv - vec2(uTexel.x, 0.0)).r;
+            float hr = texture2D(uPrev, vUv + vec2(uTexel.x, 0.0)).r;
+            float hu = texture2D(uPrev, vUv + vec2(0.0, uTexel.y)).r;
+            float hd = texture2D(uPrev, vUv - vec2(0.0, uTexel.y)).r;
+            float avg = (hl + hr + hu + hd) * 0.25;
+            v += (avg - h) * uTension;     // pull toward neighbours = wave propagation
+            v *= uDamping;                 // viscosity -> ripples settle to stillness
+            h += v;
+            h *= uRelax;                   // relax toward flat (controls linger / DC drift)
+            gl_FragColor = vec4(h, v, 0.0, 1.0);
+          }`
+      });
+
+      simQuad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), dropMat);
+      simScene.add(simQuad);
+
+      // Final composite — read the simulated surface, refract + light the photo
+      deckMat = new THREE.ShaderMaterial({
+        uniforms: {
+          texture1:    { value: deckTextures[0] },
+          uSim:        { value: null },
+          uResolution: { value: new THREE.Vector2(deckStageInner.offsetWidth, deckStageInner.offsetHeight) },
+          uImageResolution: { value: new THREE.Vector2(deckTextures[0].image.width, deckTextures[0].image.height) },
+          uTexel:      { value: new THREE.Vector2(1 / SIM_W, 1 / SIM_H) },
+          uHover:   { value: 0.0 },
+          uRefract: { value: FX.refract },
+          uNormal:  { value: FX.normalScale },
+          uChroma:  { value: FX.chroma },
+          uSpec:    { value: FX.spec },
+          uSpecPow: { value: FX.specPow },
+          uDim:     { value: FX.dim }
+        },
+        vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
+        fragmentShader: `
+          varying vec2 vUv;
+          uniform sampler2D texture1, uSim;
+          uniform vec2 uResolution, uImageResolution, uTexel;
+          uniform float uHover, uRefract, uNormal, uChroma, uSpec, uSpecPow, uDim;
+
+          vec2 getCoverUv(vec2 uv, vec2 resolution, vec2 imageResolution){
+            vec2 s = resolution, i = imageResolution;
+            float rs = s.x / s.y, ri = i.x / i.y;
+            vec2 nw = rs < ri ? vec2(i.x * s.y / i.y, s.y) : vec2(s.x, i.y * s.x / i.x);
+            vec2 off = (rs < ri ? vec2((nw.x - s.x) / 2.0, 0.0) : vec2(0.0, (nw.y - s.y) / 2.0)) / nw;
+            return uv * s / nw + off;
+          }
+
+          void main(){
+            vec2 uv = getCoverUv(vUv, uResolution, uImageResolution);
+
+            // surface slope from the simulated height field (central differences)
+            float hl = texture2D(uSim, vUv - vec2(uTexel.x, 0.0)).r;
+            float hr = texture2D(uSim, vUv + vec2(uTexel.x, 0.0)).r;
+            float hu = texture2D(uSim, vUv + vec2(0.0, uTexel.y)).r;
+            float hd = texture2D(uSim, vUv - vec2(0.0, uTexel.y)).r;
+            vec2 slope = vec2(hr - hl, hu - hd);
+
+            vec3 N = normalize(vec3(-slope * uNormal, 1.0));   // surface normal
+            vec2 disp = slope * uRefract * uHover;             // refraction offset
+            vec2 ca = disp * uChroma;
+
+            float r = texture2D(texture1, uv + disp + ca).r;
+            float g = texture2D(texture1, uv + disp).g;
+            float b = texture2D(texture1, uv + disp - ca).b;
+            vec3 col = vec3(r, g, b) * uDim;
+
+            // specular glint where the surface tilts toward the light
+            vec3 L = normalize(vec3(-0.45, 0.7, 0.55));
+            float spec = pow(max(dot(N, L), 0.0), uSpecPow);
+            vec3 glint = mix(vec3(1.0), vec3(1.0, 0.93, 0.74), 0.45); // warm-white, brand-tinted
+            col += glint * spec * uSpec * uHover;
+
+            gl_FragColor = vec4(col, 1.0);
+          }`,
+        transparent: true
+      });
+
+      buildSim(deckStageInner.offsetWidth / Math.max(1, deckStageInner.offsetHeight));
+
+      const mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), deckMat);
+      deckScene.add(mesh);
+
+      resizeDeck();
+      window.addEventListener('resize', resizeDeck);
+
+      // Live-tuning handles: edit window.__FX.* then call window.__applyFX()
+      window.__deckMat = deckMat;
+      window.__FX = FX;
+      window.__applyFX = applyFX;
+
+      // queued drops to inject next frame (x,y pairs in 0-1 surface space)
+      const dropQueue = [];
+      let lastT = 0;
+
+      // Listen on the window (not the canvas) and gate by the canvas bounds, so the
+      // whole cover ripples even where the title text and category nav items sit on
+      // top of the canvas and would otherwise swallow its mouse events. Passive move
+      // tracking only — clicks on those titles/nav links still work untouched.
+      window.addEventListener('mousemove', (e) => {
+        let mx, my, w, h;
+        if (e.target === deckCanvas) {
+          w = deckCanvas.offsetWidth; h = deckCanvas.offsetHeight;
+          if (w < 1) return;
+          mx = e.offsetX / w;
+          my = 1.0 - e.offsetY / h;
+        } else {
+          const rect = deckCanvas.getBoundingClientRect();
+          if (rect.width < 1) return;
+          mx = (e.clientX - rect.left) / rect.width;
+          my = 1.0 - (e.clientY - rect.top) / rect.height;
+        }
+        const inside = mx >= 0 && mx <= 1 && my >= 0 && my <= 1;
+        if (!inside) { targetHover = 0.0; lastMouse.x = -1; return; }   // treat as leave
+
+        targetHover = 1.0;
+        if (lastMouse.x < 0.0) {                                        // treat as enter
+          lastMouse.set(mx, my);
+          dropQueue.push(mx, my);
+          return;
+        }
+        const dx = mx - lastMouse.x, dy = my - lastMouse.y;
+        const d = Math.sqrt(dx*dx + dy*dy);
+        if (d < FX.dropGap * 0.5) return;
+        // inject drops evenly along the path so fast swipes leave a continuous wake
+        const steps = Math.min(16, Math.max(1, Math.floor(d / FX.dropGap)));
+        for (let i = 1; i <= steps; i++) {
+          const t = i / steps;
+          dropQueue.push(lastMouse.x + dx * t, lastMouse.y + dy * t);
+        }
+        lastMouse.set(mx, my);
+      });
+
+      const swap = () => { const t = simRead; simRead = simWrite; simWrite = t; };
+
+      function renderFrame() {
+        // 1) inject queued drops — each is one ping-pong pass
+        simQuad.material = dropMat;
+        const maxDrops = Math.min(dropQueue.length, 40); // cap = 20 points / frame
+        for (let k = 0; k < maxDrops; k += 2) {
+          dropMat.uniforms.uPrev.value = simRead.texture;
+          dropMat.uniforms.uDrop.value.set(dropQueue[k], dropQueue[k + 1]);
+          deckRenderer.setRenderTarget(simWrite);
+          deckRenderer.render(simScene, simCamera);
+          swap();
+        }
+        dropQueue.length = 0;
+
+        // 2) advance the wave equation a fixed number of steps (stable wave speed)
+        simQuad.material = stepMat;
+        const steps = FX.substeps | 0;
+        for (let s = 0; s < steps; s++) {
+          stepMat.uniforms.uPrev.value = simRead.texture;
+          deckRenderer.setRenderTarget(simWrite);
+          deckRenderer.render(simScene, simCamera);
+          swap();
+        }
+
+        // 3) composite the photo through the simulated surface
+        deckRenderer.setRenderTarget(null);
+        deckMat.uniforms.uSim.value = simRead.texture;
+        deckMat.uniforms.uHover.value = currentHover;
+        deckRenderer.render(deckScene, deckCamera);
+      }
+
+      // only run the (expensive, multi-pass) water sim while the deck is on screen.
+      // off-screen it sits idle — the wave field settles and resumes on re-entry.
+      let deckVisible = false;
+      new IntersectionObserver(([e]) => { deckVisible = e.isIntersecting; if (deckVisible) lastT = 0; },
+        { rootMargin: '120px 0px' }).observe(deckStageInner);
+
+      gsap.ticker.add((time) => {
+        if (!deckVisible) return;
+        const dt = lastT ? Math.min(0.05, time - lastT) : 0.016;
+        lastT = time;
+        // frame-rate-independent hover fade (consistent on 60Hz and 120Hz)
+        currentHover += (targetHover - currentHover) * (1.0 - Math.exp(-dt / FX.hoverTau));
+        renderFrame();
+      });
+
+    }
+
+    // push window.__FX values into the live uniforms (call after editing __FX)
+    function applyFX() {
+      if (!deckMat) return;
+      dropMat.uniforms.uRadius.value  = FX.dropRadius;
+      dropMat.uniforms.uForce.value   = FX.dropForce;
+      stepMat.uniforms.uDamping.value = FX.damping;
+      stepMat.uniforms.uTension.value = FX.tension;
+      stepMat.uniforms.uRelax.value   = FX.relax;
+      deckMat.uniforms.uRefract.value = FX.refract;
+      deckMat.uniforms.uNormal.value  = FX.normalScale;
+      deckMat.uniforms.uChroma.value  = FX.chroma;
+      deckMat.uniforms.uSpec.value    = FX.spec;
+      deckMat.uniforms.uSpecPow.value = FX.specPow;
+      deckMat.uniforms.uDim.value     = FX.dim;
+    }
+
+    function resizeDeck() {
+      const rect = deckStageInner.getBoundingClientRect();
+      if (rect.width < 1 || rect.height < 1) return;
+      deckRenderer.setSize(rect.width, rect.height);
+      if (deckMat) {
+        deckMat.uniforms.uResolution.value.set(rect.width, rect.height);
+        const aspect = rect.width / rect.height;
+        if (Math.abs(aspect - simAspect) > simAspect * 0.04) buildSim(aspect);
+      }
+    }
+  }
+
+  const deckTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: '#work', start: 'top top', end: '+=' + (totalCards - 1) * 100 + '%',
+      pin: true, scrub: true, anticipatePin: 1,
+      onUpdate: self => {
+        let calcIdx = Math.round(self.progress * (totalCards - 1));
+        if (calcIdx !== activeIdx) {
+          if (navItems[activeIdx]) navItems[activeIdx].classList.remove('active');
+          if (images[activeIdx]) images[activeIdx].classList.remove('active');
+          if (titles[activeIdx]) titles[activeIdx].classList.remove('active');
+          if (thumbs[activeIdx]) thumbs[activeIdx].classList.remove('active');
+          
+          activeIdx = calcIdx;
+          
+          if (navItems[activeIdx]) navItems[activeIdx].classList.add('active');
+          if (images[activeIdx]) images[activeIdx].classList.add('active');
+          if (titles[activeIdx]) titles[activeIdx].classList.add('active');
+          if (thumbs[activeIdx]) thumbs[activeIdx].classList.add('active');
+
+          // keep the "View gallery · N frames" cue in sync with the active category
+          const _ctaCount = document.getElementById('deck-cta-count');
+          const _ta = titles[activeIdx] && titles[activeIdx].querySelector('a[data-gal]');
+          if (_ctaCount && _ta && GALLERIES[_ta.dataset.gal]) {
+            _ctaCount.textContent = ' · ' + GALLERIES[_ta.dataset.gal].images.length + ' frames';
+          }
+
+          // Instantly switch texture
+          if (deckMat && deckTextures[activeIdx]) {
+             deckMat.uniforms.texture1.value = deckTextures[activeIdx];
+             const img = deckTextures[activeIdx].image;
+             if (img) {
+               deckMat.uniforms.uImageResolution.value.set(img.width, img.height);
+             }
+          }
+        }
+      }
+    }
+  });
+
+  const handleDeckClick = (index) => {
+    const st = deckTl.scrollTrigger;
+    if (st) {
+      const scrollPos = st.start + (st.end - st.start) * (index / (totalCards - 1));
+      if (typeof lenis !== 'undefined') lenis.scrollTo(scrollPos, { duration: 1.2 });
+      else window.scrollTo({ top: scrollPos, behavior: 'smooth' });
+    }
+  };
+  
+  navItems.forEach((el, i) => {
+    el.addEventListener('click', () => handleDeckClick(i));
+    el.addEventListener('mouseenter', () => handleDeckClick(i));
+  });
+  thumbs.forEach((el, i) => {
+    el.addEventListener('click', () => handleDeckClick(i));
+    el.addEventListener('mouseenter', () => handleDeckClick(i));
+  });
+
+  /* ── studio cascade parallax ── */
+  if (desktop && !reduced) {
+    document.querySelectorAll('.casc-img').forEach(el => {
+      const sp = parseFloat(el.dataset.speed || 1);
+      gsap.fromTo(el, { y: sp * 70 }, {
+        y: sp * -70, ease: 'none',
+        scrollTrigger: { trigger: '#studio .casc', start: 'top bottom', end: 'bottom top', scrub: true }
+      });
+    });
+  }
+
+  /* ── marquees: duplicate lanes for seamless loops ── */
+  const createChip = n => {
+    const name = n.replace(/\.(png|webp|jpg|jpeg)$/i, '').trim();
+    const div = document.createElement('div');
+    div.className = 'chip';
+    const img = document.createElement('img');
+    img.loading = 'lazy';
+    img.src = 'logos/' + n;
+    img.alt = name;
+    div.appendChild(img);
+    return div;
+  };
+  const m1 = document.getElementById('marq1'), m2 = document.getElementById('marq2');
+  if (typeof LOGOS !== 'undefined') {
+    const half = Math.ceil(LOGOS.length / 2);
+    m1.replaceChildren(); m2.replaceChildren();
+    for (let i = 0; i < 2; i++) {
+      LOGOS.slice(0, half).forEach(n => m1.appendChild(createChip(n)));
+      LOGOS.slice(half).forEach(n => m2.appendChild(createChip(n)));
+    }
+  }
+
+  /* ── signature frames fan ── */
+  const fans = gsap.utils.toArray('.fan-card');
+  fans.forEach((f, i) => {
+    const off = i - 3;
+    gsap.set(f, { left: '50%', top: '56%', xPercent: -50, yPercent: -50, zIndex: 10 - Math.abs(off), transformOrigin: '50% 120%' });
+  });
+  if (!reduced) {
+    const fanTl = gsap.timeline({
+      scrollTrigger: { trigger: '#frames', start: 'top top', end: '+=130%', pin: true, scrub: true, invalidateOnRefresh: true }
+    });
+    fans.forEach((f, i) => {
+      const off = i - 3;
+      fanTl.to(f, {
+        x: () => off * Math.min(window.innerWidth * 0.118, 215),
+        y: () => Math.pow(Math.abs(off), 1.6) * 9,
+        rotation: off * 7.5,
+        ease: 'none', duration: 1
+      }, 0);
+    });
+  } else {
+    fans.forEach((f, i) => {
+      const off = i - 3;
+      gsap.set(f, { x: off * Math.min(window.innerWidth * 0.118, 215), y: Math.pow(Math.abs(off), 1.6) * 9, rotation: off * 7.5 });
+    });
+  }
+
+  /* ── testimonials: 35mm film-strip reel ── */
+  /*  EDIT REAL TESTIMONIALS HERE — quote, name, role, and 1–2 char monogram.  */
+  const TESTIMONIALS = [
+    { q: "Curtain Drop didn't just film our launch — they gave it a pulse. Every frame felt like it belonged in a theatre.", name: "Maya Rao", role: "Marketing Director, Lumen Hotels", mono: "MR" },
+    { q: "We came in with a logo and left with a whole visual language. The brand finally looks the way it always felt.", name: "Daniel Mehta", role: "Founder, Atlas Coffee Co.", mono: "DM" },
+    { q: "The product photography lifted our conversion rate the week it went live. Detail you can almost touch.", name: "Priya Nair", role: "Head of E-commerce, Saffron & Co.", mono: "PN" },
+    { q: "They understood the story before we'd finished telling it. The final edit made our whole team tear up.", name: "Arjun Khanna", role: "CEO, Northwind Studios", mono: "AK" },
+    { q: "From the first call to final delivery it felt less like hiring a vendor and more like gaining a creative partner.", name: "Sofia Marlowe", role: "Brand Lead, Vela Apparel", mono: "SM" },
+  ];
+  const reelTrack = document.getElementById('reel-track');
+  if (reelTrack) {
+    reelTrack.replaceChildren();
+    TESTIMONIALS.forEach(t => {
+      const art = document.createElement('article');
+      art.className = 'reel-frame';
+      const mark = document.createElement('div');
+      mark.className = 'mark';
+      mark.textContent = '“';
+      const p = document.createElement('p');
+      p.className = 'qt';
+      p.textContent = t.q;
+      const by = document.createElement('div');
+      by.className = 'by';
+      const mono = document.createElement('span');
+      mono.className = 'mono';
+      mono.textContent = t.mono;
+      const who = document.createElement('span');
+      who.className = 'who';
+      const nm = document.createElement('span');
+      nm.className = 'nm';
+      nm.textContent = t.name;
+      const rl = document.createElement('span');
+      rl.className = 'rl';
+      rl.textContent = t.role;
+      who.appendChild(nm);
+      who.appendChild(rl);
+      by.appendChild(mono);
+      by.appendChild(who);
+      art.appendChild(mark);
+      art.appendChild(p);
+      art.appendChild(by);
+      reelTrack.appendChild(art);
+    });
+
+    const reelVp   = reelTrack.parentElement;
+    const reelFrames = gsap.utils.toArray('.reel-frame');
+    const perfTop    = document.getElementById('reel-perf-top');
+    const perfBottom = document.getElementById('reel-perf-bottom');
+    const reelNum    = document.getElementById('reel-num');
+    const reelOf     = document.getElementById('reel-of');
+    if (reelOf) reelOf.textContent = String(TESTIMONIALS.length).padStart(2, '0');
+    reelFrames.forEach((f, i) => { f.dataset.fi = i + 1; });
+
+    let frameOffsets = [];
+    const updateFrameOffsets = () => { frameOffsets = reelFrames.map(f => f.offsetLeft + f.offsetWidth / 2); };
+    updateFrameOffsets();
+    window.addEventListener('resize', updateFrameOffsets);
+
+    const litFrame = () => {
+      const trackX = gsap.getProperty(reelTrack, 'x') || 0;
+      const center = (window.innerWidth / 2) - trackX;
+      let best = null, bd = 1e9;
+      frameOffsets.forEach((off, i) => {
+        const d = Math.abs(off - center);
+        if (d < bd) { bd = d; best = reelFrames[i]; }
+      });
+      reelFrames.forEach(f => f.classList.toggle('in-gate', f === best));
+      if (reelNum && best) reelNum.textContent = String(best.dataset.fi).padStart(2, '0');
+    };
+
+    /* advance the perf holes along with the film — the key to realism */
+    const advancePerfs = x => {
+      if (perfTop)    perfTop.style.backgroundPositionX    = x + 'px';
+      if (perfBottom) perfBottom.style.backgroundPositionX = x + 'px';
+    };
+
+    if (desktop && !reduced) {
+      const reelTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: '#testimonials', start: 'top top',
+          end: () => '+=' + Math.max(reelTrack.scrollWidth - window.innerWidth, 1),
+          pin: true, scrub: true, invalidateOnRefresh: true
+        }
+      });
+      reelTl.fromTo(reelTrack, { x: 0 }, {
+        x: () => -Math.max(reelTrack.scrollWidth - window.innerWidth, 0), ease: 'none',
+        onUpdate: () => {
+          const x = gsap.getProperty(reelTrack, 'x');
+          advancePerfs(x);
+          litFrame();
+        }
+      });
+      requestAnimationFrame(litFrame);
+    } else {
+      reelVp.classList.add('native');
+      reelVp.addEventListener('scroll', () => {
+        advancePerfs(-reelVp.scrollLeft);
+        const center = reelVp.scrollLeft + reelVp.offsetWidth / 2;
+        let best = null, bd = 1e9;
+        frameOffsets.forEach((off, i) => {
+          const d = Math.abs(off - center);
+          if (d < bd) { bd = d; best = reelFrames[i]; }
+        });
+        if (reelNum && best) reelNum.textContent = String(best.dataset.fi).padStart(2,'0');
+      }, { passive: true });
+    }
+  }
+
+  /* ── FAQ accordion ── */
+  document.querySelectorAll('#faq .qa').forEach(qa => {
+    const a = qa.querySelector('.a');
+    qa.querySelector('.q').addEventListener('click', () => {
+      const open = qa.classList.toggle('open');
+      gsap.to(a, { height: open ? 'auto' : 0, duration: 0.65, ease: 'power3.inOut', onComplete: () => ScrollTrigger.refresh() });
+    });
+  });
+
+  /* ── cycling word ── */
+  const cyc = document.getElementById('cycle');
+  if (cyc) {
+    const spans = cyc.querySelectorAll('span');
+    let w = 0;
+    spans.forEach(s => w = Math.max(w, s.offsetWidth));
+    if (w) cyc.style.width = w + 'px';
+    if (!reduced) {
+      let idx = 0;
+      setInterval(() => {
+        idx = (idx + 1) % spans.length;
+        gsap.to(spans, { y: -idx * 1.2 + 'em', duration: 0.75, ease: 'power3.inOut', onComplete: () => {
+          if (idx === spans.length - 1) { idx = 0; gsap.set(spans, { y: 0 }); }
+        }});
+      }, 2300);
+    }
+  }
+
+  /* ── menu ── */
+  const menuBtn = document.getElementById('menu-btn');
+  function closeMenu() {
+    if (!document.body.classList.contains('menu-open')) return;
+    document.body.classList.remove('menu-open');
+    if (lenis && !document.body.classList.contains('gal-open')) lenis.start();
+  }
+  menuBtn.addEventListener('click', () => {
+    const open = document.body.classList.toggle('menu-open');
+    if (lenis) open ? lenis.stop() : lenis.start();
+  });
+
+  /* ── gallery overlay ── */
+  const gal = document.getElementById('gal');
+  const galCols = document.getElementById('gal-cols');
+  const galTitle = document.getElementById('gal-title');
+  let galImages = [];
+  function openGal(key) {
+    const g = GALLERIES[key];
+    if (!g) return;
+    galImages = g.images;
+    galTitle.textContent = g.title;
+    const countEl = document.createElement('i');
+    countEl.id = 'gal-count';
+    countEl.textContent = g.images.length + ' frames';
+    galTitle.appendChild(countEl);
+    galCols.replaceChildren();
+    g.images.forEach((src, i) => {
+      const img = document.createElement('img');
+      img.loading = 'lazy'; img.decoding = 'async'; img.alt = g.title + ' - Image ' + (i + 1);
+      img.addEventListener('load', () => img.classList.add('ld'), { once: true });
+      img.src = src;
+      img.addEventListener('click', () => openLb(i));
+      galCols.appendChild(img);
+    });
+    closeMenu();
+    document.body.classList.add('gal-open');
+    gal.scrollTop = 0;
+    if (lenis) lenis.stop();
+  }
+  function closeGal() {
+    document.body.classList.remove('gal-open');
+    if (lenis && !document.body.classList.contains('lb-open')) lenis.start();
+    setTimeout(() => { galCols.replaceChildren(); }, 600);
+  }
+  document.querySelectorAll('[data-gal]').forEach(el => {
+    el.addEventListener('click', e => { e.preventDefault(); openGal(el.dataset.gal); });
+  });
+  document.getElementById('gal-close').addEventListener('click', closeGal);
+
+  /* ── Work deck: whole image + visible cue open the active category's gallery ── */
+  (() => {
+    const stage = document.querySelector('.deck-stage-inner');
+    const cta = document.querySelector('.deck-cta');
+    const ctaCount = document.getElementById('deck-cta-count');
+    const activeKey = () => {
+      const a = document.querySelector('.deck-titles h2.active a[data-gal]');
+      return a ? a.dataset.gal : null;
+    };
+    if (stage) stage.addEventListener('click', e => {
+      // the title link and the cue button have their own handlers — don't double-fire
+      if (e.target.closest('a[data-gal]') || e.target.closest('.deck-cta')) return;
+      const k = activeKey(); if (k) openGal(k);
+    });
+    if (cta) cta.addEventListener('click', e => {
+      e.preventDefault(); e.stopPropagation();
+      const k = activeKey(); if (k) openGal(k);
+    });
+    // initial count (active card on load = index 0)
+    const k0 = activeKey();
+    if (ctaCount && k0 && GALLERIES[k0]) ctaCount.textContent = ' · ' + GALLERIES[k0].images.length + ' frames';
+  })();
+
+  /* ── lightbox ── */
+  const lb = document.getElementById('lb');
+  const lbImg = document.getElementById('lb-img');
+  let lbIdx = 0;
+  function showLb(i) {
+    lbIdx = (i + galImages.length) % galImages.length;
+    lbImg.src = galImages[lbIdx];
+  }
+  function openLb(i) {
+    showLb(i);
+    document.body.classList.add('lb-open');
+    if (lenis) lenis.stop();
+  }
+  function closeLb() {
+    document.body.classList.remove('lb-open');
+    if (lenis && !document.body.classList.contains('gal-open')) lenis.start();
+  }
+  document.getElementById('lb-close').addEventListener('click', e => { e.stopPropagation(); closeLb(); });
+  document.getElementById('lb-prev').addEventListener('click', e => { e.stopPropagation(); showLb(lbIdx - 1); });
+  document.getElementById('lb-next').addEventListener('click', e => { e.stopPropagation(); showLb(lbIdx + 1); });
+  lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+  document.addEventListener('keydown', e => {
+    if (document.body.classList.contains('lb-open')) {
+      if (e.key === 'Escape') return closeLb();
+      if (e.key === 'ArrowLeft') return showLb(lbIdx - 1);
+      if (e.key === 'ArrowRight') return showLb(lbIdx + 1);
+    }
+    if (e.key === 'Escape') { closeGal(); closeMenu(); }
+  });
+  document.querySelectorAll('.fcount').forEach(el => {
+    const g = GALLERIES[el.dataset.galcount];
+    if (g) el.textContent = g.images.length + ' frames';
+  });
+
+  /* ── form → mailto ── */
+  document.getElementById('enquire').addEventListener('submit', e => {
+    e.preventDefault();
+    const f = e.target;
+    const subject = 'Project enquiry — ' + f.service.value + ' — ' + f.name.value;
+    const body = 'Name: ' + f.name.value + '\nEmail: ' + f.email.value + '\nService: ' + f.service.value + '\n\n' + f.message.value;
+    window.location.href = 'mailto:Curtaindropmedia@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+  });
+
+  /* ── resize veil ── */
+  const veil = document.getElementById('veil');
+  let rzT;
+  window.addEventListener('resize', () => {
+    veil.classList.add('show');
+    clearTimeout(rzT);
+    rzT = setTimeout(() => { veil.classList.remove('show'); ScrollTrigger.refresh(); }, 300);
+  });
+
+  /* ── loader: preload + curtain drop ── */
+  const loader = document.getElementById('loader');
+  const pctEl = loader.querySelector('.pct');
+  const rod = loader.querySelector('.rod i');
+  const greet = loader.querySelector('.greet');
+  /* preload the first things the eye lands on: the Work-deck covers + thumbs */
+  const preloads = [...new Set([
+    ...[...document.querySelectorAll('.deck-thumb img')].map(i => i.src),
+    ...[...document.querySelectorAll('.deck-image')].map(d => {
+      const m = /url\(['"]?(.*?)['"]?\)/.exec(d.style.backgroundImage || '');
+      return m && m[1];
+    }).filter(Boolean)
+  ])];
+  let loaded = 0;
+  const total = Math.max(1, preloads.length);
+  preloads.forEach(src => {
+    const im = new Image();
+    im.onload = im.onerror = () => loaded++;
+    im.src = src;
+  });
+  gsap.to(greet, { opacity: 1, duration: 1, delay: 0.15 });
+  const t0 = performance.now();
+  let shown = 0;
+  function tickLoad() {
+    const real = loaded / total;
+    const minRamp = Math.min(1, (performance.now() - t0) / 2100);
+    const target = Math.min(real, minRamp) * 100;
+    shown += (target - shown) * 0.12;
+    const v = Math.round(shown);
+    pctEl.textContent = v;
+    rod.style.width = v + '%';
+    if (v >= 100) { markReady(); return; }
+    requestAnimationFrame(tickLoad);
+  }
+  function heroIn() {
+    document.body.classList.add('ready');
+    heroH1.classList.add('on');
+    document.querySelectorAll('#hero [data-reveal]').forEach(el => el.classList.add('on'));
+  }
+
+  /* ── The house curtain now opens on the visitor's FIRST scroll, not on load.
+        markReady() arms it once assets are in; reveal() parts the velvet. ── */
+  const enterBtn = loader.querySelector('.enter');
+  const tagEl = loader.querySelector('.tag');
+  let ready = false, revealed = false;
+  function markReady() {
+    if (ready) return; ready = true;
+    pctEl.textContent = '100'; rod.style.width = '100%';
+    if (tagEl) tagEl.textContent = 'The stage is set';
+    loader.classList.add('ready');                       // reveals the "Scroll to enter" cue
+    gsap.to([pctEl, rod.parentNode], { opacity: 0, duration: 0.6, delay: 0.2 });
+    arm();
+  }
+  function arm() {
+    const onScroll = (e) => { if (e && e.cancelable) e.preventDefault(); fire(); };
+    const onKey = (e) => { if ([' ', 'Spacebar', 'ArrowDown', 'PageDown', 'Enter'].indexOf(e.key) >= 0) { e.preventDefault(); fire(); } };
+    function fire() {
+      window.removeEventListener('wheel', onScroll);
+      window.removeEventListener('touchmove', onScroll);
+      window.removeEventListener('keydown', onKey);
+      reveal();
+    }
+    window.addEventListener('wheel', onScroll, { passive: false });
+    window.addEventListener('touchmove', onScroll, { passive: false });
+    window.addEventListener('keydown', onKey);
+    if (enterBtn) enterBtn.addEventListener('click', fire);
+  }
+  function reveal() {
+    if (revealed) return; revealed = true;
+    heroIn();                                            // homepage settles in behind the cloth
+    loader.style.background = 'transparent';             // so the falling curtain reveals the homepage, not the loader panel
+    gsap.to([greet, tagEl, enterBtn], { opacity: 0, duration: 0.4, ease: 'power2.out' });
+    const done = () => {
+      loader.classList.add('done');
+      loader.style.display = 'none';
+      document.body.classList.remove('loading');
+      if (lenis) lenis.start();
+      ScrollTrigger.refresh();
+    };
+    if (window.playCurtain) window.playCurtain(done);   // part the red velvet
+    else gsap.to(loader, { yPercent: -108, duration: 1.0, ease: 'power4.inOut', onComplete: done });
+  }
+  if (reduced) {
+    pctEl.textContent = '100';
+    loader.style.display = 'none';
+    heroIn();
+    document.body.classList.remove('loading');
+  } else {
+    Promise.race([document.fonts ? document.fonts.ready : Promise.resolve(), new Promise(r => setTimeout(r, 1200))])
+      .then(() => requestAnimationFrame(tickLoad));
+    setTimeout(markReady, 6500);                         // safety: never trap the visitor
+  }
+});
+</script>
+<script>
+// ═══════════════════════════════════════════════════════════════
+// "LIT STAGE" BACKDROP  —  the homepage sits on a dark, gold-lit stage.
+// (The velvet curtain itself now lives on the loader — see __curtain.)
+//  • a volumetric FOLLOW-SPOT that re-aims at the cursor — pans + tilts
+//  • a soft circular POOL centred exactly on the cursor (gradual fade)
+//  • DUST motes drifting in parallax, shining only inside the beam
+//  • a HOVER halo (uHover) that grabs whatever tile the cursor is over
+//  the whole rig re-lights per section. One fullscreen fragment shader.
+// ═══════════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', function () {
+  if (typeof THREE === 'undefined') return;
+  const canvas = document.getElementById('bgstage');
+  if (!canvas) return;
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const mobile  = window.matchMedia('(max-width: 900px)').matches;
+
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false, powerPreference: 'high-performance' });
+  } catch (e) { canvas.remove(); return; }   // no WebGL → #bgfade fallback stays
+  // soft, dark background → render BELOW native res (huge GPU saving, visually identical):
+  // was 1.5/1.0; a fullscreen fragment shader every frame is the site's biggest GPU cost.
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, mobile ? 0.85 : 1.0));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  const scene  = new THREE.Scene();
+  const camera = new THREE.Camera();
+  const geo    = new THREE.PlaneGeometry(2, 2);
+
+  const uniforms = {
+    uTime:    { value: 0 },
+    uRes:     { value: new THREE.Vector2(1, 1) },
+    uScroll:  { value: 0 },
+    uMouse:   { value: new THREE.Vector2(0.5, 0.55) },           // cursor, y-up
+    uLight:   { value: new THREE.Vector2(0.5, 0.5) },            // per-section ambient key
+    uHover:   { value: new THREE.Vector4(0.5, 0.5, 0.0, 0.0) },  // hovered tile: x,y (y-up), radius, strength
+    uWarm:    { value: 0.72 },
+    uInt:     { value: 1.0 },
+    uMobile:  { value: mobile ? 1.0 : 0.0 },
+  };
+
+  const vert = 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }';
+  const frag = `
+    precision highp float;
+    varying vec2 vUv;
+    uniform vec2 uRes, uMouse, uLight;
+    uniform vec4 uHover;
+    uniform float uTime, uScroll, uWarm, uInt, uMobile;
+    float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7)))*43758.5453); }
+
+    // ── volumetric dust: a parallax layer of slow-drifting motes. Each mote's
+    //    brightness is multiplied (by the caller) with the local light so the
+    //    dust only sparkles where the beam falls — it shines in the ray. ──
+    float dustLayer(vec2 p, float scale, float t, float seed){
+      p = p*scale + vec2(seed*7.3 + sin(t*0.6)*0.3, -t);  // drift down, faint lateral sway
+      vec2 c = floor(p); vec2 f = fract(p);
+      float v = 0.0;
+      for (int j=-1; j<=1; j++){
+        for (int i=-1; i<=1; i++){
+          vec2 o = vec2(float(i), float(j));
+          vec2 id = c + o;
+          float h = hash(id + seed);
+          float present = step(0.60, h);                 // a denser field of tiny specks
+          vec2 pos = o + vec2(hash(id+0.3), hash(id+0.7));
+          float d = length(f - pos);
+          float sz = 0.045 + 0.05*hash(id+0.9);          // tiny, varied mote radius
+          float m = smoothstep(sz, 0.0, d); m *= m;       // crisp speck, not a soft blob
+          float tw = 0.45 + 0.55*sin(t*80.0 + h*40.0);   // glints
+          v += present * m * tw * (0.3 + 0.7*h);
+        }
+      }
+      return v;
+    }
+
+    void main(){
+      vec2 uv = vUv;
+      float agg = uRes.x / max(uRes.y, 1.0);
+      vec2 p = uv; p.x *= agg;                            // square-ish space, x in [0, agg]
+
+      vec3 warm = mix(vec3(0.80,0.58,0.26), vec3(0.92,0.72,0.40), uWarm);  // gold, never cream
+      vec3 cool = vec3(0.40,0.48,0.68);
+      vec3 col  = vec3(0.010,0.0085,0.0065);             // near-black stage floor
+
+      // ── follow-spot: a cone from a high fixture that re-aims at the cursor,
+      //    so it PANS (x) and TILTS (y) to point exactly where the mouse is ──
+      vec2 m   = vec2(uMouse.x*agg, uMouse.y);
+      vec2 fx  = vec2(mix(0.5, uMouse.x, 0.55)*agg, 1.16);   // fixture hung high, drifts toward cursor x
+      vec2 bd  = normalize(m - fx);
+      float L  = max(length(m - fx), 0.001);
+      vec2 pf  = p - fx;
+      float along = dot(pf, bd);
+      float perp  = length(pf - bd*along);
+      float width = mix(0.015, 0.165, clamp(along/L, 0.0, 1.0));
+      float cone  = smoothstep(width, 0.0, perp) * smoothstep(L*1.28, L*0.06, along) * step(0.0, along);
+
+      // ── circular pool centred EXACTLY on the cursor, very gradual fade-away ──
+      float dm   = length(p - m);
+      float core = exp(-dm*dm*9.0);                       // bright, tight centre
+      float pool = core*0.8 + exp(-dm*dm*2.4)*0.30;       // + a gentle, wide fall-off
+
+      // ── per-section ambient key + a cool counter-rim for depth ──
+      vec2 lp  = vec2(uLight.x*agg, uLight.y);
+      float key = exp(-dot(p-lp,p-lp)*3.4);
+      vec2 rp  = vec2((0.92 - uLight.x*0.4)*agg, 0.12);
+      float rim = exp(-dot(p-rp,p-rp)*2.2)*0.4;
+
+      // ── hover halo: the beam grabs the hovered tile (centre .xy, radius .z,
+      //    strength .w) and a soft disc blooms behind it → glow around its edges ──
+      vec2 hp  = vec2(uHover.x*agg, uHover.y);
+      float hd = length(p - hp);
+      float halo = smoothstep(uHover.z*1.7, uHover.z*0.22, hd) * uHover.w;
+
+      col += warm * (cone*0.070 + pool*0.128 + key*0.09 + halo*0.186) * uInt;   // follow-spot + hover +16%
+      col += cool * rim * 0.11;
+      col += vec3(0.0035,0.003,0.0025);
+
+      // ── dust: fine motes that only catch light inside the actual ray (cone +
+      //    tight cursor core + hover) so they "shine around the ray of light" ──
+      float beam = cone*1.0 + core*0.9 + halo*0.7;
+      vec2 par = (uMouse - 0.5);                          // parallax push from the cursor → depth
+      float dust  = dustLayer(p + par*0.06, 13.0, uTime*0.018, 11.0) * 0.6;
+      dust       += dustLayer(p + par*0.14, 21.0, uTime*0.030, 23.0) * 0.42;
+      dust       += dustLayer(p + par*0.24, 32.0, uTime*0.050, 37.0) * 0.28;
+      col += warm * dust * clamp(beam, 0.0, 1.3) * 0.5;
+
+      vec2 cc = uv - vec2(0.5, 0.52); cc.x *= agg;        // legibility vignette
+      col *= mix(0.42, 1.0, clamp(smoothstep(1.15, 0.30, length(cc)), 0.0, 1.0));
+      col += (hash(uv*uRes + fract(uTime)) - 0.5)*0.012;  // dither out banding
+      gl_FragColor = vec4(col, 1.0);
+    }`;
+
+  const mat = new THREE.ShaderMaterial({ uniforms, vertexShader: vert, fragmentShader: frag, depthTest: false, depthWrite: false });
+  scene.add(new THREE.Mesh(geo, mat));
+
+  // per-section lighting (ACT 2): pos[x,y up], warm, intensity
+  const SECTION = {
+    hero:   { p:[0.30,0.62], w:0.72, i:1.00 },
+    story:  { p:[0.78,0.66], w:0.60, i:0.92 },
+    craft:  { p:[0.50,0.30], w:0.65, i:0.96 },
+    work:   { p:[0.40,0.55], w:0.60, i:0.92 },   // the follow-spot reveals the work
+    studio: { p:[0.82,0.60], w:0.70, i:0.98 },
+    brands: { p:[0.22,0.55], w:0.60, i:0.90 },
+    testimonials: { p:[0.50,0.56], w:0.62, i:0.94 },   // centred gate light for the film reel
+    frames: { p:[0.50,0.78], w:0.65, i:0.96 },
+    faq:    { p:[0.74,0.32], w:0.55, i:0.86 },
+    begin:  { p:[0.50,0.50], w:0.82, i:1.12 },
+  };
+
+  let sx=0.30, sy=0.62, warm=0.72, intn=1.0, scr=0;
+  let mx=0.5, my=0.55, mxs=0.5, mys=0.55;
+  if (!mobile) window.addEventListener('mousemove', e => {
+    mx = e.clientX/window.innerWidth; my = 1.0 - e.clientY/window.innerHeight;
+  }, { passive:true });
+
+  function resize(){ renderer.setSize(window.innerWidth, window.innerHeight); uniforms.uRes.value.set(canvas.width, canvas.height); }
+  window.addEventListener('resize', resize); resize();
+
+  function scrollProgress(){
+    const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    return Math.min(1, Math.max(0, (window.scrollY||0)/max));
+  }
+
+  // ── hover-to-light: the follow-spot grabs whatever image/tile the cursor is
+  //    over. The tile gets a CSS glow (.spotlit); the shader blooms a halo
+  //    behind it (uHover) so the glow also radiates around the image edges. ──
+  let hovEl=null, hovX=0.5, hovY=0.5, hovR=0.0, hovS=0.0, tgtR=0.0, tgtS=0.0;
+  function setHover(el){
+    hovEl = el;
+    if (el){ 
+      const r = el.getBoundingClientRect(); 
+      el._pageX = r.left + r.width / 2;
+      el._pageY = r.top + r.height / 2 + window.scrollY;
+      tgtR = Math.max(r.width, r.height)/window.innerWidth*0.6; 
+      tgtS = 1.0; 
+    }
+    else { tgtS = 0.0; }
+  }
+  if (!mobile){
+    document.querySelectorAll('.fan-card, .casc-img, .deck-stage-inner').forEach(el => {
+      el.classList.add('lit-tile');
+      el.addEventListener('pointerenter', () => { el.classList.add('spotlit'); setHover(el); });
+      el.addEventListener('pointerleave', () => { el.classList.remove('spotlit'); if (hovEl===el) setHover(null); });
+    });
+  }
+
+  const clock = new THREE.Clock();
+  let lit=false;
+  function frame(dt){
+    uniforms.uTime.value = clock.elapsedTime;
+    const sec = SECTION[window.__stageSection] || SECTION.hero;
+    const k = 1 - Math.exp(-3.0*dt);
+    mxs += (mx-mxs)*(1-Math.exp(-6.0*dt)); mys += (my-mys)*(1-Math.exp(-6.0*dt));
+    sx += (sec.p[0]-sx)*k; sy += (sec.p[1]-sy)*k;
+    warm += (sec.w-warm)*k; intn += (sec.i-intn)*k;
+    scr  += (scrollProgress()-scr)*(1-Math.exp(-4.0*dt));
+    if (hovEl && tgtS>0){
+      hovX = hovEl._pageX / window.innerWidth;
+      hovY = 1.0 - (hovEl._pageY - window.scrollY) / window.innerHeight;
+    }
+    hovR += (tgtR-hovR)*k; hovS += (tgtS-hovS)*(1-Math.exp(-7.0*dt));
+    uniforms.uMouse.value.set(mxs, mys);
+    uniforms.uLight.value.set(sx, sy);
+    uniforms.uHover.value.set(hovX, hovY, Math.max(hovR, 0.04), hovS);
+    uniforms.uWarm.value=warm; uniforms.uInt.value=intn; uniforms.uScroll.value=scr;
+    renderer.render(scene, camera);
+    if(!lit){ lit=true; canvas.classList.add('lit'); }
+  }
+
+  if (reduced){ uniforms.uLight.value.set(0.3,0.6); renderer.render(scene,camera); canvas.classList.add('lit'); return; }
+
+  let running=true, rafId=0;
+  function loop(){ if(!running) return; rafId=requestAnimationFrame(loop); frame(Math.min(clock.getDelta(),0.05)); }
+  document.addEventListener('visibilitychange', () => {
+    if(document.hidden){ running=false; cancelAnimationFrame(rafId); }
+    else if(!running){ running=true; clock.getDelta(); loop(); }   // guard: never stack rAF chains
+  });
+  loop();
+
+})();
+</script>
+<script>
+// ═══════════════════════════════════════════════════════════════
+// THE HOUSE CURTAIN  —  a realistic RED VELVET grand drape on the
+// loading screen. It hangs (with a faint idle sway) until the visitor's
+// first scroll, then parts from the centre to reveal the homepage.
+
+// ═══════════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', function () {
+  const canvas = document.getElementById('curtain');
+  if (!canvas || typeof THREE === 'undefined') return;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const mobile  = window.matchMedia('(max-width: 900px)').matches;
+
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true, premultipliedAlpha: false, powerPreference: 'high-performance' });
+  } catch (e) { return; }                 // no WebGL → loader stays a plain dark panel, reveal() falls back to a slide
+  renderer.setClearColor(0x000000, 0);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, mobile ? 1.0 : 1.5));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  const scene  = new THREE.Scene();
+  const camera = new THREE.Camera();
+  const uniforms = {
+    uTime:   { value: 0 },
+    uRes:    { value: new THREE.Vector2(1, 1) },
+    uOpen:   { value: 0 },
+    uMobile: { value: mobile ? 1.0 : 0.0 },
+  };
+
+  const vert = 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }';
+  const frag = `
+    precision highp float;
+    varying vec2 vUv;
+    uniform vec2 uRes;
+    uniform float uTime, uOpen, uMobile;
+    float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7)))*43758.5453); }
+    float hash1(float n){ return fract(sin(n)*43758.5453); }
+    float vnoise(vec2 p){
+      vec2 i=floor(p), f=fract(p); f=f*f*(3.0-2.0*f);
+      float a=hash(i), b=hash(i+vec2(1.0,0.0)), c=hash(i+vec2(0.0,1.0)), d=hash(i+vec2(1.0,1.0));
+      return mix(mix(a,b,f.x), mix(c,d,f.x), f.y);
+    }
+
+    // ── realistic RED VELVET drape. fab.x = horizontal, vy = fabric-vertical
+    //    (0 = hem at the floor → 1 = gathered top under the rod). ──
+    vec3 velvet(vec2 fab, float vy){
+      float x = fab.x;
+      float pleats = mix(11.0, 8.0, uMobile);
+      // irregular pleat spacing → folds vary in width, none identical
+      float wander = sin(x*4.0)*0.05 + sin(x*9.3+1.7)*0.025 + (vnoise(vec2(x*3.0, vy*0.7))-0.5)*0.22;
+      float fx   = (x + wander) * pleats;
+      float cell = floor(fx);
+      float amp  = 0.74 + 0.32*hash1(cell);                          // per-fold depth
+      float lc   = clamp(fract(fx) + (hash1(cell+9.1)-0.5)*0.12, 0.0, 1.0);
+      float hump = sin(lc*3.14159265);                               // 0 at the dark seams → 1 at the crest
+      float height = hump*amp;
+      float slope  = cos(lc*3.14159265)*3.14159265*pleats*amp;        // steep at seams, flat at crest
+      vec3  N  = normalize(vec3(-slope*0.055, 0.0, 1.0));
+      // warm key from upper-left + velvet's signature grazing sheen
+      vec3  Ld = normalize(vec3(-0.40, 0.45, 0.80));
+      float diff = clamp(dot(N, Ld), 0.0, 1.0);
+      float fres = pow(1.0 - clamp(N.z, 0.0, 1.0), 2.3);             // glows where folds turn from view
+      float ao   = mix(0.26, 1.0, smoothstep(0.0, 0.85, height));     // deep dark valleys
+      // colour grade: near-black maroon → mid crimson → scarlet crest
+      vec3 col = mix(vec3(0.026,0.003,0.006), vec3(0.33,0.024,0.034), diff);
+      col = mix(col, vec3(0.66,0.075,0.085), diff*diff*height);
+      col += vec3(0.95,0.34,0.30) * fres * 0.30;                      // sheen on the fold sides
+      col *= ao;
+      // fabric nap (velvet tooth) — fine sparkle, warm
+      float nap = (vnoise(fab*uRes.xy/6.0)-0.5)*0.045 + (hash(floor(fab*uRes/2.0))-0.5)*0.025;
+      col += nap*vec3(1.0,0.62,0.62);
+      // vertical light: pooled-dark hem, lit middle, shadow under the valance
+      col *= mix(0.66, 1.12, smoothstep(0.0, 0.58, vy));
+      col *= mix(1.0,  0.62, smoothstep(0.80, 1.0, vy));
+      col *= mix(0.72, 1.0,  smoothstep(0.0, 0.20, vy));
+      return max(col, 0.0);
+    }
+
+    void main(){
+      vec2 uv = vUv;
+      float op = clamp(uOpen, 0.0, 1.0);
+      // ── the curtain DROPS: released from rest, accelerates under gravity ──
+      float e = op*op;                                                // quadratic fall (slow release → fast)
+      float topEdge = mix(1.04, -0.10, e);                            // its top edge falls past the floor
+      float sway = sin(uTime*0.5 + uv.y*2.4)*0.006*(1.0-e)            // idle breathing while it hangs
+                 + sin(uTime*3.0 + uv.x*4.0)*0.005*e*(1.0-e);         // a wobble as it lets go
+      float xw = uv.x + sway + sin(uv.y*2.0+0.6)*0.009;               // gentle global drape bow
+      float vy = clamp(uv.y + (1.0 - topEdge), 0.0, 1.3);             // fabric coord (texture falls with the cloth)
+
+      float cloth = smoothstep(topEdge+0.004, topEdge-0.004, uv.y);   // 1 in cloth, 0 in the reveal
+      vec3  vcol  = velvet(vec2(xw, vy), vy);
+      vec2  cc = uv - vec2(0.5, 0.52);
+      vcol *= mix(0.60, 1.0, clamp(smoothstep(1.2, 0.25, length(cc)), 0.0, 1.0));  // stage vignette
+      vcol += (hash(uv*uRes)-0.5)*0.008;
+
+      float shadowA = exp(-(uv.y - topEdge)*24.0) * step(topEdge, uv.y) * e * 0.5; // hem's shadow on the reveal
+      vec3 col = mix(vec3(0.0), vcol, cloth);                          // black (shadow) in the reveal, velvet in the cloth
+      float a  = max(cloth, shadowA);
+      gl_FragColor = vec4(col, a);
+    }`;
+
+  const mat = new THREE.ShaderMaterial({ uniforms, vertexShader: vert, fragmentShader: frag, transparent: true, depthTest: false, depthWrite: false });
+  scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), mat));
+
+  function resize(){ renderer.setSize(window.innerWidth, window.innerHeight); uniforms.uRes.value.set(canvas.width, canvas.height); }
+  window.addEventListener('resize', resize); resize();
+
+  const FX = { openDur: 1.5 };
+  const clock = new THREE.Clock();
+  let running = true, rafId = 0, playing = false;
+  function frame(){ uniforms.uTime.value = clock.elapsedTime; renderer.render(scene, camera); }
+  function loop(){ if (!running) return; rafId = requestAnimationFrame(loop); frame(); }
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden){ running = false; cancelAnimationFrame(rafId); }
+    else if (!running){ running = true; clock.getDelta(); loop(); }
+  });
+
+  function dispose(){ running = false; cancelAnimationFrame(rafId);
+    try { mat.dispose(); renderer.dispose(); renderer.forceContextLoss(); } catch(e){} }
+
+  window.playCurtain = function(cb) {
+    if (playing){ if (cb) cb(); return; }
+    playing = true;
+    const o = { v: 0 };
+    gsap.to(o, { v: 1, duration: FX.openDur, ease: 'none',     // gravity accel lives in the shader (e=op*op)
+      onUpdate(){ uniforms.uOpen.value = o.v; },
+      onComplete(){ gsap.to(canvas, { opacity: 0, duration: 0.3, ease: 'power2.out', onComplete(){ if (cb) cb(); dispose(); } }); }
+    });
+  };
+
+  if (reduced){ uniforms.uOpen.value = 1; frame(); return; }   // loader is hidden under reduced anyway
+  loop();
+})();
+</script>
+<!--END-->
+</body>
+</html>

@@ -58,7 +58,7 @@ button{background:none;border:0;color:inherit;font:inherit;cursor:pointer}
    per section, the way fromanother.love crossfades its canvas. #bgfade is the
    deepest tone + the no-WebGL fallback; #grain keeps the filmic texture on top. */
 #bgfade{position:fixed;inset:0;z-index:0;background:var(--bg);transition:background 1.3s var(--ease)}
-#bgstage{position:fixed;inset:0;z-index:1;width:100%;height:100%;pointer-events:none;opacity:0;transition:opacity 1.4s var(--ease)}
+#bgstage{position:fixed;inset:0;z-index:1;width:100%;height:100%;pointer-events:none;opacity:0;transition:opacity 1.4s var(--ease);transform:translateZ(0);-webkit-transform:translateZ(0)}
 #bgstage.lit{opacity:1}
 #grain{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.5;mix-blend-mode:overlay}
 main{position:relative;z-index:3}
@@ -2041,7 +2041,13 @@ document.addEventListener('DOMContentLoaded', function () {
     mx = e.clientX/window.innerWidth; my = 1.0 - e.clientY/window.innerHeight;
   }, { passive:true });
 
-  function resize(){ renderer.setSize(window.innerWidth, window.innerHeight); uniforms.uRes.value.set(canvas.width, canvas.height); }
+  let _lastResizeW = 0;
+  function resize(){
+    const w = window.innerWidth, h = window.innerHeight;
+    if (mobile && w === _lastResizeW) return; // skip URL-bar-only height changes on mobile
+    _lastResizeW = w;
+    renderer.setSize(w, h); uniforms.uRes.value.set(canvas.width, canvas.height);
+  }
   window.addEventListener('resize', resize); resize();
 
   function scrollProgress(){
@@ -2099,10 +2105,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
   let running=true, rafId=0;
   function loop(){ if(!running) return; rafId=requestAnimationFrame(loop); frame(Math.min(clock.getDelta(),0.05)); }
+  function restartLoop(){ if(!running){ running=true; clock.getDelta(); loop(); } }
   document.addEventListener('visibilitychange', () => {
     if(document.hidden){ running=false; cancelAnimationFrame(rafId); }
-    else if(!running){ running=true; clock.getDelta(); loop(); }   // guard: never stack rAF chains
+    else restartLoop();
   });
+  // iOS back/forward cache: page is re-shown without a visibilitychange
+  window.addEventListener('pageshow', e => { if(e.persisted) restartLoop(); });
+  // WebGL context loss (GPU eviction under mobile memory pressure)
+  canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); running=false; cancelAnimationFrame(rafId); }, false);
+  canvas.addEventListener('webglcontextrestored', () => restartLoop(), false);
   loop();
 
 })();
